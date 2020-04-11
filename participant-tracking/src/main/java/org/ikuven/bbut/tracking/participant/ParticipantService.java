@@ -6,17 +6,18 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Component
-public class ParticipantLapService {
+public class ParticipantService {
 
     private ParticipantRepository repository;
 
     @Autowired
-    public ParticipantLapService(ParticipantRepository repository) {
+    public ParticipantService(ParticipantRepository repository) {
         this.repository = repository;
     }
 
@@ -29,11 +30,25 @@ public class ParticipantLapService {
                 .collect(Collectors.toList());
     }
 
-    public Participant saveLap(int participantId, LocalDateTime finishTime, LapState lapState) {
-
-        Participant participant = repository.findById(participantId)
+    public Participant getParticipant(long participantId) {
+        return repository.findById(participantId)
                 .orElseThrow(() -> new IllegalArgumentException(String.format("No participant found with id %d", participantId)));
+    }
 
+    public Participant registerParticipant(String firstName, String lastName) {
+        return repository.save(Participant.of(0L, firstName, lastName, ParticipantState.NOT_STARTED, Collections.emptyList()));
+    }
+
+    public Participant setState(long participantId, ParticipantState participantState) {
+        Participant participant = getParticipant(participantId);
+        participant.setParticipantState(participantState);
+
+        return repository.save(participant);
+    }
+
+    public Participant saveLap(long participantId, LocalDateTime finishTime, LapState lapState) {
+
+        Participant participant = getParticipant(participantId);
         participant.addLap(finishTime, lapState);
 
         return repository.save(participant);
