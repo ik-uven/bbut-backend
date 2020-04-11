@@ -2,16 +2,30 @@
 
 == Participant tracking
 
+Register participant:
+
+[source,curl]
+----
+curl -X POST -H 'content-type: application/json' -d '{"firstName": "Ken", "lastName": "Alexandersson"}' http://localhost:8080/api/participants | jq
+----
+
+Change particpant's state
+
+[source,curl]
+----
+curl -X PUT -H 'content-type: application/json' http://localhost:8080/api/participants/1/states/STARTED | jq
+----
+
 Get all participants:
 
-[source,bash]
+[source,curl]
 ----
 curl http://localhost:8080/api/participants | jq
 ----
 
 Add lap for participant:
 
-[source,bash]
+[source,curl]
 ----
 curl -d '{"finishTime":"2020-08-08T12:53:00", "lapState":"COMPLETED"}' -H "Content-Type: application/json" -X POST http://localhost:8080/api/participants/3/laps  | jq
 ----
