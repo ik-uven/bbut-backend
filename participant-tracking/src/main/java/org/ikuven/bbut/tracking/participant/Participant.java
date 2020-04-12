@@ -21,6 +21,7 @@ public class Participant {
     private long id;
     private String firstName;
     private String lastName;
+    private String team;
     private ParticipantState participantState;
     private List<Lap> laps;
 

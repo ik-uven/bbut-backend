@@ -1,15 +1,15 @@
 package org.ikuven.bbut.tracking.participant;
 
 import lombok.AllArgsConstructor;
-import lombok.Value;
+import lombok.Data;
 
 import java.time.LocalDateTime;
 
-@Value
+@Data
 @AllArgsConstructor(staticName = "of")
 public class Lap {
 
     int number;
     LocalDateTime finishTime;
-    LapState lapState;
+    LapState state;
 }

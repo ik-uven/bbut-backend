@@ -7,4 +7,5 @@ public class ParticipantInput {
 
     private String firstName;
     private String lastName;
+    private String team;
 }

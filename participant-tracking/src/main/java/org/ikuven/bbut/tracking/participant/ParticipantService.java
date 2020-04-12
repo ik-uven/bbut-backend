@@ -35,8 +35,8 @@ public class ParticipantService {
                 .orElseThrow(() -> new IllegalArgumentException(String.format("No participant found with id %d", participantId)));
     }
 
-    public Participant registerParticipant(String firstName, String lastName) {
-        return repository.save(Participant.of(0L, firstName, lastName, ParticipantState.NOT_STARTED, Collections.emptyList()));
+    public Participant registerParticipant(String firstName, String lastName, String team) {
+        return repository.save(Participant.of(0L, firstName, lastName, team, ParticipantState.NOT_STARTED, Collections.emptyList()));
     }
 
     public Participant setState(long participantId, ParticipantState participantState) {
@@ -54,6 +54,17 @@ public class ParticipantService {
         return repository.save(participant);
     }
 
+    public Participant updateLapState(long participantId, Integer lapNumber, LapState lapState) {
+
+        Participant participant = getParticipant(participantId);
+        participant.getLaps().stream()
+                .filter(lap -> lap.getNumber() == lapNumber)
+                .findFirst()
+                .ifPresent(lap -> lap.setState(lapState));
+
+        return repository.save(participant);
+    }
+
     private static class ParticipantLapComparator implements Comparator<Participant> {
 
         @Override
@@ -63,7 +74,7 @@ public class ParticipantService {
 
         private Integer latestCompletedLapOrdinal(Participant participant) {
             return participant.getLaps().stream()
-                    .filter(lap -> lap.getLapState().equals(LapState.COMPLETED))
+                    .filter(lap -> lap.getState().equals(LapState.COMPLETED))
                     .sorted(Comparator.comparingInt(Lap::getNumber).reversed())
                     .limit(1)
                     .map(Lap::getNumber)
