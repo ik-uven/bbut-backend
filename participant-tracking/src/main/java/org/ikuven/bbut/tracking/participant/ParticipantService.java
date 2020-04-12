@@ -25,7 +25,7 @@ public class ParticipantService {
 
         Comparator<? super Participant> participantComparator = new ParticipantLapComparator();
 
-        return repository.findAll(Sort.by(Sort.Direction.ASC, "firstName")).stream()
+        return repository.findAll(Sort.by(Sort.Direction.ASC, "participantState", "firstName")).stream()
                 .sorted(participantComparator)
                 .collect(Collectors.toList());
     }
