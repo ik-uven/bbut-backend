@@ -51,6 +51,10 @@ public class ParticipantService {
         Participant participant = getParticipant(participantId);
         participant.addLap(finishTime, lapState);
 
+        if (LapState.OVERDUE.equals(lapState)) {
+            participant.setParticipantState(ParticipantState.RESIGNED);
+        }
+
         return repository.save(participant);
     }
 
