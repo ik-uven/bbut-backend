@@ -25,7 +25,9 @@ public class TrackingController {
     @PostMapping(path = "/api/participants", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Participant> registerParticipant(@RequestBody ParticipantInput participantInput) {
 
-        return ResponseEntity.ok(participantService.registerParticipant(participantInput.getFirstName(), participantInput.getLastName(), participantInput.getTeam()));
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(participantService.registerParticipant(participantInput.getFirstName(), participantInput.getLastName(), participantInput.getTeam()));
     }
 
     @PutMapping(path = "/api/participants/{id}/states/{state}", consumes = MediaType.APPLICATION_JSON_VALUE)
@@ -52,12 +54,21 @@ public class TrackingController {
     @PutMapping(path = "/api/participants/{id}/laps", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Participant> saveLap(@PathVariable(value = "id") long participantId, @RequestBody LapInput lapInput) {
 
-        return ResponseEntity.ok(participantService.saveLap(participantId, lapInput.getFinishTime(), lapInput.getLapState()));
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .header("Access-Control-Allow-Origin", "*")
+                .body(participantService.saveLap(participantId, lapInput.getFinishTime(), lapInput.getLapState()));
     }
 
     @PutMapping(path = "/api/participants/{id}/laps/{lapNumber}/states/{state}", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Participant> updateLapState(@PathVariable(value = "id") long participantId, @PathVariable Integer lapNumber, @PathVariable(value = "state") LapState lapState) {
 
         return ResponseEntity.ok(participantService.updateLapState(participantId, lapNumber, lapState));
+    }
+
+    @DeleteMapping(path = "/api/participants/{id}/laps/{lapNumber}")
+    public ResponseEntity<Participant> deleteLap(@PathVariable(value = "id") long participantId, @PathVariable Integer lapNumber) {
+
+        return ResponseEntity.ok(participantService.deleteLap(participantId, lapNumber));
     }
 }

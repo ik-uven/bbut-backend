@@ -54,6 +54,14 @@ public class ParticipantService {
         return repository.save(participant);
     }
 
+    public Participant deleteLap(long participantId, Integer lapNumber) {
+
+        Participant participant = getParticipant(participantId);
+        participant.getLaps().remove(lapNumber - 1);
+
+        return repository.save(participant);
+    }
+
     public Participant updateLapState(long participantId, Integer lapNumber, LapState lapState) {
 
         Participant participant = getParticipant(participantId);

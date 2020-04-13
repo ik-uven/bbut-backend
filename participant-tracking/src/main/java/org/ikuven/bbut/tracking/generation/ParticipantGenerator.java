@@ -1,5 +1,6 @@
 package org.ikuven.bbut.tracking.generation;
 
+import org.ikuven.bbut.tracking.participant.LapState;
 import org.ikuven.bbut.tracking.participant.ParticipantService;
 import org.ikuven.bbut.tracking.participant.ParticipantState;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +11,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
@@ -48,7 +50,9 @@ public class ParticipantGenerator {
 
     public void generate() {
 
-        for (int i = 1; i <= 120; i++) {
+        LocalDateTime now = LocalDateTime.parse("2020-08-08T10:00:00");
+
+        for (int i = 1; i <= 8; i++) {
             String newGivenNames = generateGivenNames();
             String newsSurname = generateLastName();
             String newTeam = generateTeam();
@@ -58,7 +62,12 @@ public class ParticipantGenerator {
 
         participantService.getAllParticipants().stream()
                 .skip(3)
-                .forEach(participant -> participantService.setState(participant.getId(), ParticipantState.ACTIVE));
+                .forEach(participant -> {
+                    participantService.setState(participant.getId(), ParticipantState.ACTIVE);
+                    for (int i = 0; i < 3; i++) {
+                        participantService.saveLap(participant.getId(), now.plusHours(i).plusMinutes(45 + i), LapState.COMPLETED);
+                    }
+                });
     }
 
     public String generateGivenNames() {
