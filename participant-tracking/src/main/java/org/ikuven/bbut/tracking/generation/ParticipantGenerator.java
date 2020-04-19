@@ -60,14 +60,14 @@ public class ParticipantGenerator {
             participantService.registerParticipant(newGivenNames, newsSurname, newTeam);
         }
 
-        participantService.getAllParticipants().stream()
-                .skip(3)
-                .forEach(participant -> {
-                    participantService.setState(participant.getId(), ParticipantState.ACTIVE);
-                    for (int i = 0; i < 3; i++) {
-                        participantService.saveLap(participant.getId(), now.plusHours(i).plusMinutes(45 + i), LapState.COMPLETED);
-                    }
-                });
+//        participantService.getAllParticipants().stream()
+//                .skip(3)
+//                .forEach(participant -> {
+//                    participantService.setState(participant.getId(), ParticipantState.ACTIVE);
+//                    for (int i = 0; i < 3; i++) {
+//                        participantService.saveLap(participant.getId(), now.plusHours(i).plusMinutes(45 + i), LapState.COMPLETED);
+//                    }
+//                });
     }
 
     public String generateGivenNames() {

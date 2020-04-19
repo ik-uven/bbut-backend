@@ -36,7 +36,7 @@ public class ParticipantService {
     }
 
     public Participant registerParticipant(String firstName, String lastName, String team) {
-        return repository.save(Participant.of(0L, firstName, lastName, team, ParticipantState.NOT_STARTED, Collections.emptyList()));
+        return repository.save(Participant.of(0L, firstName, lastName, team, ParticipantState.REGISTERED, Collections.emptyList()));
     }
 
     public Participant setState(long participantId, ParticipantState participantState) {
@@ -86,7 +86,6 @@ public class ParticipantService {
 
         private Integer latestCompletedLapOrdinal(Participant participant) {
             return participant.getLaps().stream()
-                    .filter(lap -> lap.getState().equals(LapState.COMPLETED))
                     .sorted(Comparator.comparingInt(Lap::getNumber).reversed())
                     .limit(1)
                     .map(Lap::getNumber)
