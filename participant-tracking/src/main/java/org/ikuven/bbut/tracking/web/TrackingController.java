@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
+@RequestMapping(path = "/api")
 public class TrackingController {
 
     private final ParticipantService participantService;
