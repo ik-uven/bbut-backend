@@ -2,4 +2,16 @@ spring:
   application:
     name: result-tracker
 
+  data:
+    mongodb:
+      database: local
+
+---
+spring:
+  profiles: dev
+
+  data:
+    mongodb:
+      database: test
+
 

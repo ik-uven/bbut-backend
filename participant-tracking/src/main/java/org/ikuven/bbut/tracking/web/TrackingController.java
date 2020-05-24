@@ -27,9 +27,12 @@ public class TrackingController {
     }
 
     @PostMapping(path = "/participants", consumes = MediaType.APPLICATION_JSON_VALUE)
+
     public ResponseEntity<ParticipantDto> registerParticipant(@RequestBody ParticipantInput participantInput) {
 
-        Participant participant = participantService.registerParticipant(participantInput.getFirstName(), participantInput.getLastName(), participantInput.getTeam());
+        Participant.Gender gender = Participant.Gender.valueOf(participantInput.getGender());
+
+        Participant participant = participantService.registerParticipant(participantInput.getFirstName(), participantInput.getLastName(), participantInput.getClub(), participantInput.getTeam(), gender, participantInput.getBirthYear());
 
         eventPublisher.publishEvent(participant);
 
@@ -56,8 +59,8 @@ public class TrackingController {
                 .header("Access-Control-Allow-Origin", "*")
                 .body(
                         participantService.getAllParticipants().stream()
-                        .map(this::toDto)
-                        .collect(Collectors.toList())
+                                .map(this::toDto)
+                                .collect(Collectors.toList())
                 );
     }
 

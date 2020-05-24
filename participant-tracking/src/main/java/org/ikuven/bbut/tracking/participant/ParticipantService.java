@@ -8,7 +8,6 @@ import org.springframework.stereotype.Component;
 import java.time.LocalDateTime;
 import java.util.Comparator;
 import java.util.List;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Component
@@ -23,12 +22,16 @@ public class ParticipantService {
 
     public List<Participant> getAllParticipants() {
 
-        Comparator<? super Participant> latestCompletedLapComparator = new LatestCompletedLapComparator();
-
-        return repository.findAll(Sort.by(Sort.Direction.ASC, "participantState", "firstName")).stream()
-                .sorted(latestCompletedLapComparator)
-                .sorted(Comparator.comparing(participant -> participant.getLastLapState().ordinal()))
+        return repository.findAll(Sort.by(Sort.Direction.ASC, "firstName")).stream()
+                .sorted(onNumberOfLaps()
+                        .thenComparing(Participant::getParticipantState)
+                        .thenComparing(participant -> participant.getLastLapState().ordinal())
+                )
                 .collect(Collectors.toList());
+    }
+
+    private Comparator<Participant> onNumberOfLaps() {
+        return Comparator.comparing(participant -> participant.getLaps().size(), Comparator.reverseOrder());
     }
 
     public Participant getParticipant(long participantId) {
@@ -36,8 +39,13 @@ public class ParticipantService {
                 .orElseThrow(() -> new IllegalArgumentException(String.format("No participant found with id %d", participantId)));
     }
 
-    public Participant registerParticipant(String firstName, String lastName, String team) {
-        return repository.save(Participant.of(0L, firstName, lastName, team, ParticipantState.REGISTERED));
+    public Participant registerParticipant(String firstName, String lastName, String club, String team, Participant.Gender gender, Integer birthYear) {
+        return repository.save(Participant.of(0L, firstName, lastName, club, team, gender, birthYear, ParticipantState.REGISTERED));
+    }
+
+    public Participant registerParticipant(Participant participant) {
+        participant.setId(0L);
+        return repository.save(participant);
     }
 
     public Participant setState(long participantId, ParticipantState participantState) {
@@ -73,22 +81,5 @@ public class ParticipantService {
         participant.updateLapState(lapState, lapNumber);
 
         return repository.save(participant);
-    }
-
-    static class LatestCompletedLapComparator implements Comparator<Participant> {
-
-        @Override
-        public int compare(Participant o1, Participant o2) {
-            return Integer.compare(latestCompletedLapOrdinal(o2), latestCompletedLapOrdinal(o1));
-        }
-
-        private Integer latestCompletedLapOrdinal(Participant participant) {
-            return participant.getLaps().stream()
-                    .sorted(Comparator.comparingInt(Lap::getNumber).reversed())
-                    .limit(1)
-                    .map(Lap::getNumber)
-                    .findFirst()
-                    .orElse(Integer.MIN_VALUE);
-        }
     }
 }

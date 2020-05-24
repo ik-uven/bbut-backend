@@ -22,35 +22,39 @@ public class Participant {
     private long id;
     private String firstName;
     private String lastName;
+    private String club;
     private String team;
+    private Gender gender;
+    private Integer birthYear;
     private ParticipantState participantState;
     private List<Lap> laps = Collections.emptyList();
-    private LapState lastLapState = LapState.NONE;
 
-    public static Participant of(long id, String firstName, String lastName, String team, ParticipantState participantState) {
-        return new Participant(id, firstName, lastName, team, participantState);
+    public static Participant of(long id, String firstName, String lastName, String club, String team, Gender gender, Integer birthYear, ParticipantState participantState) {
+        return new Participant(id, firstName, lastName, club, team, gender, birthYear, participantState);
     }
 
-    public static Participant of(long id, String firstName, String lastName, String team, ParticipantState participantState, List<Lap> laps) {
-        return new Participant(id, firstName, lastName, team, participantState, laps);
+    public static Participant of(long id, String firstName, String lastName, String club, String team, Gender gender, Integer birthYear, ParticipantState participantState, List<Lap> laps) {
+        return new Participant(id, firstName, lastName, club, team, gender, birthYear, participantState, laps);
     }
 
-    private Participant(long id, String firstName, String lastName, String team, ParticipantState participantState) {
+    private Participant(long id, String firstName, String lastName, String club, String team, Gender gender, Integer birthYear, ParticipantState participantState) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
+        this.club = club;
         this.team = team;
+        this.gender = gender;
+        this.birthYear = birthYear;
         this.participantState = participantState;
     }
 
-    private Participant(long id, String firstName, String lastName, String team, ParticipantState participantState, List<Lap> laps) {
-        this(id, firstName, lastName, team, participantState);
+    private Participant(long id, String firstName, String lastName, String club, String team, Gender gender, Integer birthYear, ParticipantState participantState, List<Lap> laps) {
+        this(id, firstName, lastName, club, team, gender, birthYear, participantState);
         this.laps = laps;
     }
 
     public void addLap(LocalDateTime finishTime, LapState lapState) {
         laps.add(Lap.of(nextLapNumber(), finishTime, lapState));
-        lastLapState = lapState;
     }
 
     public void updateLapState(LapState lapState, Integer lapNumber) {
@@ -59,12 +63,23 @@ public class Participant {
                 .findFirst()
                 .ifPresent(lap -> lap.setState(lapState));
 
-        if (this.getLaps().size() == lapNumber) {
-            this.setLastLapState(lapState);
-        }
+    }
+
+    public LapState getLastLapState() {
+        Lap lastLap = laps.stream()
+                .reduce((first, second) -> second)
+                .orElse(null);
+
+        return lastLap != null ? lastLap.getState() : LapState.NONE;
     }
 
     private int nextLapNumber() {
         return laps.size() + 1;
+    }
+
+    public enum Gender {
+        UNKNOWN,
+        FEMALE,
+        MALE
     }
 }

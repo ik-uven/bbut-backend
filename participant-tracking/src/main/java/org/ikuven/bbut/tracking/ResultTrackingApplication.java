@@ -1,6 +1,6 @@
 package org.ikuven.bbut.tracking;
 
-import org.ikuven.bbut.tracking.generation.ParticipantGenerator;
+import org.ikuven.bbut.tracking.generation.ParticipantDummyGenerator;
 import org.ikuven.bbut.tracking.repository.DatabaseSequenceRepository;
 import org.ikuven.bbut.tracking.repository.ParticipantRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,17 +20,21 @@ public class ResultTrackingApplication implements CommandLineRunner {
         SpringApplication.run(ResultTrackingApplication.class, args);
     }
 
-    @Autowired
-    ParticipantRepository repository;
+    private final ParticipantRepository repository;
+
+    private final DatabaseSequenceRepository sequenceRepository;
+
+    private final ParticipantDummyGenerator participantDummyGenerator;
+
+    private final Environment environment;
 
     @Autowired
-    DatabaseSequenceRepository sequenceRepository;
-
-    @Autowired
-    ParticipantGenerator participantGenerator;
-
-    @Autowired
-    Environment environment;
+    public ResultTrackingApplication(ParticipantRepository repository, DatabaseSequenceRepository sequenceRepository, ParticipantDummyGenerator participantDummyGenerator, Environment environment) {
+        this.repository = repository;
+        this.sequenceRepository = sequenceRepository;
+        this.participantDummyGenerator = participantDummyGenerator;
+        this.environment = environment;
+    }
 
     @Override
     public void run(String... args) {
@@ -41,7 +45,7 @@ public class ResultTrackingApplication implements CommandLineRunner {
         }
 
         if (Arrays.asList(environment.getActiveProfiles()).contains("demo")) {
-            participantGenerator.generate();
+            participantDummyGenerator.generate();
         }
     }
 }

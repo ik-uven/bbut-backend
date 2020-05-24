@@ -13,6 +13,7 @@ import org.springframework.data.domain.Sort;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -153,6 +154,36 @@ class ParticipantServiceTest {
                 );
     }
 
+    @Test
+    @DisplayName("should correctly sort when xxxxxxxxxxxxxxxxx")
+    void getAllParticipants6() {
+        List<Lap> laps1 = createLaps(COMPLETED);
+        List<Lap> laps2 = createLaps(COMPLETED, COMPLETED);
+        List<Lap> laps2x = createLaps(COMPLETED, OVERDUE);
+
+        Participant participant10 = createParticipant(laps2, 1L, "Tom", "Eldow", ParticipantState.ACTIVE);
+        Participant participant50 = createParticipant(laps1, 30L, "Filip", "Niessen", ParticipantState.RESIGNED);
+        Participant participant40 = createParticipant(laps2x, 5L, "Caleb", "Johnson", ParticipantState.RESIGNED);
+        Participant participant23 = createParticipant(Collections.emptyList(), 6L, "Fred", "Soneborn", ParticipantState.RESIGNED);
+
+        List<Participant> participants = sort(List.of(participant10, participant23, participant50, participant40));
+        when(repository.findAll(any(Sort.class))).thenReturn(participants);
+
+        val allParticipants = participantService.getAllParticipants();
+
+        allParticipants
+                .forEach(System.out::println);
+
+        assertThat(allParticipants)
+                .extracting(Participant::getId, Participant::getParticipantState)
+                .containsExactly(
+                        tuple(1L, ParticipantState.ACTIVE),
+                        tuple(5L, ParticipantState.RESIGNED),
+                        tuple(30L, ParticipantState.RESIGNED),
+                        tuple(6L, ParticipantState.RESIGNED)
+                );
+    }
+
     private List<Participant> sort(List<Participant> participants) {
         return participants.stream()
                 .sorted(Comparator.comparing(Participant::getParticipantState).thenComparing(Participant::getFirstName))
@@ -160,7 +191,7 @@ class ParticipantServiceTest {
     }
 
     private Participant createResignedParticipant(List<Lap> laps, long id, String firstName, String lastName) {
-        return Participant.of(id, firstName, lastName, "", ParticipantState.RESIGNED, laps);
+        return Participant.of(id, firstName, lastName, "", "", Participant.Gender.FEMALE, 1974, ParticipantState.RESIGNED, laps);
     }
 
     private Participant createParticipant(List<Lap> laps, long id, String firstName, String lastName) {
@@ -169,7 +200,12 @@ class ParticipantServiceTest {
 
         ParticipantState active = !hasOverdueLap ? ParticipantState.ACTIVE: ParticipantState.RESIGNED;
 
-        return Participant.of(id, firstName, lastName, "", active, laps);
+        return Participant.of(id, firstName, lastName, "", "", Participant.Gender.MALE, 1981, active, laps);
+    }
+
+    private Participant createParticipant(List<Lap> laps, long id, String firstName, String lastName, ParticipantState participantState) {
+
+        return Participant.of(id, firstName, lastName, "", "", Participant.Gender.MALE, 1981, participantState, laps);
     }
 
     private List<Lap> createLaps(LapState... lapStates) {
