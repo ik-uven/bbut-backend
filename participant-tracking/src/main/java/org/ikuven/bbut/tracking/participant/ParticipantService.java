@@ -6,9 +6,9 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Component
@@ -23,10 +23,11 @@ public class ParticipantService {
 
     public List<Participant> getAllParticipants() {
 
-        Comparator<? super Participant> participantComparator = new ParticipantLapComparator();
+        Comparator<? super Participant> latestCompletedLapComparator = new LatestCompletedLapComparator();
 
         return repository.findAll(Sort.by(Sort.Direction.ASC, "participantState", "firstName")).stream()
-                .sorted(participantComparator)
+                .sorted(latestCompletedLapComparator)
+                .sorted(Comparator.comparing(participant -> participant.getLastLapState().ordinal()))
                 .collect(Collectors.toList());
     }
 
@@ -36,7 +37,7 @@ public class ParticipantService {
     }
 
     public Participant registerParticipant(String firstName, String lastName, String team) {
-        return repository.save(Participant.of(0L, firstName, lastName, team, ParticipantState.REGISTERED, Collections.emptyList()));
+        return repository.save(Participant.of(0L, firstName, lastName, team, ParticipantState.REGISTERED));
     }
 
     public Participant setState(long participantId, ParticipantState participantState) {
@@ -69,15 +70,12 @@ public class ParticipantService {
     public Participant updateLapState(long participantId, Integer lapNumber, LapState lapState) {
 
         Participant participant = getParticipant(participantId);
-        participant.getLaps().stream()
-                .filter(lap -> lap.getNumber() == lapNumber)
-                .findFirst()
-                .ifPresent(lap -> lap.setState(lapState));
+        participant.updateLapState(lapState, lapNumber);
 
         return repository.save(participant);
     }
 
-    private static class ParticipantLapComparator implements Comparator<Participant> {
+    static class LatestCompletedLapComparator implements Comparator<Participant> {
 
         @Override
         public int compare(Participant o1, Participant o2) {
