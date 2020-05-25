@@ -21,6 +21,10 @@ import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Objects;
+import java.util.function.Predicate;
+
+import static java.util.function.Predicate.*;
 
 @RestController
 @RequestMapping("/api/participants/imports")
@@ -52,8 +56,9 @@ public class ImportsController {
 
         new BufferedReader(new InputStreamReader(uploadedInputStream, StandardCharsets.UTF_8))
                 .lines()
+                .filter(Objects::nonNull)
+                .filter(not(String::isEmpty))
                 .map(this::prepareParticipant)
-                .sorted(Comparator.comparing(Participant::getBirthYear))
                 .forEach(participantService::registerParticipant);
 
         return ResponseEntity
@@ -68,10 +73,10 @@ public class ImportsController {
         String club = capitalizeFirst(candidate[2]);
         String team = capitalizeFirst(candidate[3]);
         Participant.Gender gender = candidate[4] != null ? Participant.Gender.valueOf(candidate[4]) : Participant.Gender.UNKNOWN;
-        String town = capitalizeFirst(candidate[5]);
-        Integer birthYear = candidate[6] != null ? Integer.valueOf(candidate[6]) : null;
+        String town = null; //capitalizeFirst(candidate[5]);
+        Integer birthYear = null; //candidate[6] != null ? Integer.valueOf(candidate[6]) : null;
 
-        return Participant.of(0L, firstName, lastName, club, team, gender, birthYear, ParticipantState.ACTIVE);
+        return Participant.of(0L, firstName, lastName, club, team, gender, birthYear, ParticipantState.REGISTERED);
     }
 
     private String resultAsJson(ImportsResult importsResult) throws JsonProcessingException {

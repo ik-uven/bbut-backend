@@ -103,6 +103,6 @@ public class TrackingController {
     }
 
     private ParticipantDto toDto(Participant participant) {
-        return ParticipantDto.of(participant.getId(), participant.getFirstName(), participant.getLastName(), participant.getTeam(), participant.getParticipantState(), participant.getLaps());
+        return ParticipantDto.of(participant.getId(), participant.getFirstName(), participant.getLastName(), participant.getClub(), participant.getTeam(), participant.getParticipantState(), participant.getLaps());
     }
 }
