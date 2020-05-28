@@ -55,10 +55,10 @@ public class ParticipantService {
         return repository.save(participant);
     }
 
-    public Participant saveLap(long participantId, LocalDateTime finishTime, LapState lapState) {
+    public Participant saveLap(long participantId, LocalDateTime registrationTime, LapState lapState) {
 
         Participant participant = getParticipant(participantId);
-        participant.addLap(finishTime, lapState);
+        participant.addLap(registrationTime != null ? registrationTime : LocalDateTime.now(), lapState);
 
         if (LapState.OVERDUE.equals(lapState)) {
             participant.setParticipantState(ParticipantState.RESIGNED);
@@ -70,9 +70,13 @@ public class ParticipantService {
     public Participant deleteLap(long participantId, Integer lapNumber) {
 
         Participant participant = getParticipant(participantId);
-        participant.getLaps().remove(lapNumber - 1);
 
-        return repository.save(participant);
+        if (participant.getLaps().size() > 0) {
+            participant.getLaps().remove(lapNumber - 1);
+            participant = repository.save(participant);
+        }
+
+        return participant;
     }
 
     public Participant updateLapState(long participantId, Integer lapNumber, LapState lapState) {

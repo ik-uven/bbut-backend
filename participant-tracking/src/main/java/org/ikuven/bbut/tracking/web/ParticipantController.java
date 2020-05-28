@@ -15,13 +15,13 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(path = "/api")
-public class TrackingController {
+public class ParticipantController {
 
     private final ParticipantService participantService;
 
     private final ApplicationEventPublisher eventPublisher;
 
-    public TrackingController(ParticipantService participantService, ApplicationEventPublisher eventPublisher) {
+    public ParticipantController(ParticipantService participantService, ApplicationEventPublisher eventPublisher) {
         this.participantService = participantService;
         this.eventPublisher = eventPublisher;
     }
@@ -72,7 +72,7 @@ public class TrackingController {
     @PutMapping(path = "/participants/{id}/laps", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<ParticipantDto> saveLap(@PathVariable(value = "id") long participantId, @RequestBody LapInput lapInput) {
 
-        Participant participant = participantService.saveLap(participantId, lapInput.getFinishTime(), lapInput.getLapState());
+        Participant participant = participantService.saveLap(participantId, lapInput.getRegistrationTime(), lapInput.getLapState());
 
         eventPublisher.publishEvent(participant);
 

@@ -10,6 +10,6 @@ import java.time.LocalDateTime;
 public class Lap {
 
     int number;
-    LocalDateTime finishTime;
+    LocalDateTime registrationTime;
     LapState state;
 }

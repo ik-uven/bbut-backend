@@ -7,6 +7,6 @@ import java.time.LocalDateTime;
 
 @Data
 public class LapInput {
-    LocalDateTime finishTime;
+    LocalDateTime registrationTime;
     LapState lapState;
 }

@@ -53,8 +53,8 @@ public class Participant {
         this.laps = laps;
     }
 
-    public void addLap(LocalDateTime finishTime, LapState lapState) {
-        laps.add(Lap.of(nextLapNumber(), finishTime, lapState));
+    public void addLap(LocalDateTime registrationTime, LapState lapState) {
+        laps.add(Lap.of(nextLapNumber(), registrationTime, lapState));
     }
 
     public void updateLapState(LapState lapState, Integer lapNumber) {
