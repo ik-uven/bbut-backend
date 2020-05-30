@@ -6,6 +6,10 @@ spring:
     mongodb:
       database: local
 
+participant:
+  lap:
+    registration-grace-period: 15
+
 ---
 spring:
   profiles: dev

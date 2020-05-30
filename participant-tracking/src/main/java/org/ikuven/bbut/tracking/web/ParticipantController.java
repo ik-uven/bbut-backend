@@ -1,9 +1,6 @@
 package org.ikuven.bbut.tracking.web;
 
-import org.ikuven.bbut.tracking.participant.LapState;
-import org.ikuven.bbut.tracking.participant.Participant;
-import org.ikuven.bbut.tracking.participant.ParticipantService;
-import org.ikuven.bbut.tracking.participant.ParticipantState;
+import org.ikuven.bbut.tracking.participant.*;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -70,9 +67,9 @@ public class ParticipantController {
     }
 
     @PutMapping(path = "/participants/{id}/laps", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<ParticipantDto> saveLap(@PathVariable(value = "id") long participantId, @RequestBody LapInput lapInput) {
+    public ResponseEntity<ParticipantDto> saveLap(@PathVariable(value = "id") long participantId, @RequestBody LapInput lapInput, @RequestHeader(value = "x-client-origin", defaultValue = "QR") String origin) {
 
-        Participant participant = participantService.saveLap(participantId, lapInput.getRegistrationTime(), lapInput.getLapState());
+        Participant participant = participantService.saveLap(participantId, lapInput.getLapState(), ClientOrigin.valueOf(origin.toUpperCase()));
 
         eventPublisher.publishEvent(participant);
 
