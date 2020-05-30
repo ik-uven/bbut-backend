@@ -1,6 +1,6 @@
 package org.ikuven.bbut.tracking.generation;
 
-import org.ikuven.bbut.tracking.participant.Participant;
+import org.ikuven.bbut.tracking.participant.Gender;
 import org.ikuven.bbut.tracking.participant.ParticipantService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
@@ -10,7 +10,6 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
@@ -21,7 +20,8 @@ import java.util.stream.Stream;
 @Component
 public class ParticipantDummyGenerator {
 
-    private final List<String> shuffledGivenNames;
+    private final List<String> shuffledFemaleGivenNames;
+    private final List<String> shuffledMaleGivenNames;
     private final List<String> shuffledSurnames;
     private final List<String> shuffledClubs;
     private final List<String> shuffledTeams;
@@ -32,10 +32,11 @@ public class ParticipantDummyGenerator {
     private ParticipantDummyGenerator(ParticipantService participantService) {
         this.participantService = participantService;
 
-        Stream<String> women = readNames("names-givenname-women.txt");
-        Stream<String> men = readNames( "names-givenname-men.txt");
+        shuffledFemaleGivenNames = readNames("names-givenname-women.txt")
+                .collect(toShuffledStream())
+                .collect(Collectors.toList());
 
-        shuffledGivenNames = Stream.concat(women, men)
+        shuffledMaleGivenNames = readNames( "names-givenname-men.txt")
                 .collect(toShuffledStream())
                 .collect(Collectors.toList());
 
@@ -54,29 +55,31 @@ public class ParticipantDummyGenerator {
 
     public void generate() {
 
-        LocalDateTime now = LocalDateTime.parse("2020-08-08T10:00:00");
-
         for (int i = 1; i <= 8; i++) {
-            String newGivenNames = generateGivenNames();
+            String newGivenNames;
+            Gender gender;
             String newsSurname = generateLastName();
             String club = generateClub();
             String team = generateTeam();
 
-            participantService.registerParticipant(newGivenNames, newsSurname, club, team, Participant.Gender.FEMALE, 1974);
-        }
+            if (isEven(getRandomInteger(1, 10))) {
+                newGivenNames = generateFemaleGivenNames();
+                gender = Gender.FEMALE;
+            } else {
+                newGivenNames = generateMaleGivenNames();
+                gender = Gender.MALE;
+            }
 
-//        participantService.getAllParticipants().stream()
-//                .skip(3)
-//                .forEach(participant -> {
-//                    participantService.setState(participant.getId(), ParticipantState.ACTIVE);
-//                    for (int i = 0; i < 3; i++) {
-//                        participantService.saveLap(participant.getId(), now.plusHours(i).plusMinutes(45 + i), LapState.COMPLETED);
-//                    }
-//                });
+            participantService.registerParticipant(newGivenNames, newsSurname, club, team, gender, 1974);
+        }
     }
 
-    public String generateGivenNames() {
-        return shuffledGivenNames.get(new Random().nextInt(shuffledGivenNames.size()));
+    public String generateFemaleGivenNames() {
+        return shuffledFemaleGivenNames.get(new Random().nextInt(shuffledFemaleGivenNames.size()));
+    }
+
+    private String generateMaleGivenNames() {
+        return shuffledMaleGivenNames.get(new Random().nextInt(shuffledMaleGivenNames.size()));
     }
 
     public String generateLastName() {
@@ -113,5 +116,13 @@ public class ParticipantDummyGenerator {
             Collections.shuffle(strings);
             return strings.stream();
         });
+    }
+
+    public boolean isEven(int number) {
+        return (number & 1) == 0;
+    }
+
+    public int getRandomInteger(int maximum, int minimum){
+        return ((int) (Math.random()*(maximum - minimum))) + minimum;
     }
 }

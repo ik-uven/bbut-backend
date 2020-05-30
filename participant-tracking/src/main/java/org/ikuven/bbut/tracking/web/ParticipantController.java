@@ -27,7 +27,7 @@ public class ParticipantController {
 
     public ResponseEntity<ParticipantDto> registerParticipant(@RequestBody ParticipantInput participantInput) {
 
-        Participant.Gender gender = Participant.Gender.valueOf(participantInput.getGender());
+        Gender gender = Gender.valueOf(participantInput.getGender());
 
         Participant participant = participantService.registerParticipant(participantInput.getFirstName(), participantInput.getLastName(), participantInput.getClub(), participantInput.getTeam(), gender, participantInput.getBirthYear());
 
@@ -100,6 +100,6 @@ public class ParticipantController {
     }
 
     private ParticipantDto toDto(Participant participant) {
-        return ParticipantDto.of(participant.getId(), participant.getFirstName(), participant.getLastName(), participant.getClub(), participant.getTeam(), participant.getParticipantState(), participant.getLaps());
+        return ParticipantDto.of(participant.getId(), participant.getFirstName(), participant.getLastName(), participant.getClub(), participant.getTeam(), participant.getGender(), participant.getParticipantState(), participant.getLaps());
     }
 }

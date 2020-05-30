@@ -2,6 +2,7 @@ package org.ikuven.bbut.tracking.imports;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.ikuven.bbut.tracking.participant.Gender;
 import org.ikuven.bbut.tracking.participant.Participant;
 import org.ikuven.bbut.tracking.participant.ParticipantService;
 import org.ikuven.bbut.tracking.participant.ParticipantState;
@@ -19,10 +20,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
-import java.util.function.Predicate;
 
 import static java.util.function.Predicate.*;
 
@@ -72,7 +71,7 @@ public class ImportsController {
         String lastName = capitalizeFirst(candidate[1]);
         String club = capitalizeFirst(candidate[2]);
         String team = capitalizeFirst(candidate[3]);
-        Participant.Gender gender = candidate[4] != null ? Participant.Gender.valueOf(candidate[4]) : Participant.Gender.UNKNOWN;
+        Gender gender = candidate[4] != null ? Gender.valueOf(candidate[4]) : Gender.UNKNOWN;
         String town = null; //capitalizeFirst(candidate[5]);
         Integer birthYear = null; //candidate[6] != null ? Integer.valueOf(candidate[6]) : null;
 

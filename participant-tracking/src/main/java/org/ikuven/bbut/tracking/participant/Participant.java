@@ -77,9 +77,4 @@ public class Participant {
         return laps.size() + 1;
     }
 
-    public enum Gender {
-        UNKNOWN,
-        FEMALE,
-        MALE
-    }
 }

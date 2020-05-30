@@ -44,7 +44,7 @@ public class ParticipantService {
                 .orElseThrow(() -> new IllegalArgumentException(String.format("No participant found with id %d", participantId)));
     }
 
-    public Participant registerParticipant(String firstName, String lastName, String club, String team, Participant.Gender gender, Integer birthYear) {
+    public Participant registerParticipant(String firstName, String lastName, String club, String team, Gender gender, Integer birthYear) {
         return repository.save(Participant.of(0L, firstName, lastName, club, team, gender, birthYear, ParticipantState.REGISTERED));
     }
 

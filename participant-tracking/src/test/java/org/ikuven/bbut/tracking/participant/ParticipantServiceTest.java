@@ -1,7 +1,6 @@
 package org.ikuven.bbut.tracking.participant;
 
 import lombok.val;
-import org.assertj.core.groups.Tuple;
 import org.ikuven.bbut.tracking.repository.ParticipantRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -12,7 +11,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.Sort;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -23,7 +21,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.groups.Tuple.*;
 import static org.ikuven.bbut.tracking.participant.LapState.COMPLETED;
 import static org.ikuven.bbut.tracking.participant.LapState.OVERDUE;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
@@ -191,7 +188,7 @@ class ParticipantServiceTest {
     }
 
     private Participant createResignedParticipant(List<Lap> laps, long id, String firstName, String lastName) {
-        return Participant.of(id, firstName, lastName, "", "", Participant.Gender.FEMALE, 1974, ParticipantState.RESIGNED, laps);
+        return Participant.of(id, firstName, lastName, "", "", Gender.FEMALE, 1974, ParticipantState.RESIGNED, laps);
     }
 
     private Participant createParticipant(List<Lap> laps, long id, String firstName, String lastName) {
@@ -200,12 +197,12 @@ class ParticipantServiceTest {
 
         ParticipantState active = !hasOverdueLap ? ParticipantState.ACTIVE: ParticipantState.RESIGNED;
 
-        return Participant.of(id, firstName, lastName, "", "", Participant.Gender.MALE, 1981, active, laps);
+        return Participant.of(id, firstName, lastName, "", "", Gender.MALE, 1981, active, laps);
     }
 
     private Participant createParticipant(List<Lap> laps, long id, String firstName, String lastName, ParticipantState participantState) {
 
-        return Participant.of(id, firstName, lastName, "", "", Participant.Gender.MALE, 1981, participantState, laps);
+        return Participant.of(id, firstName, lastName, "", "", Gender.MALE, 1981, participantState, laps);
     }
 
     private List<Lap> createLaps(LapState... lapStates) {
