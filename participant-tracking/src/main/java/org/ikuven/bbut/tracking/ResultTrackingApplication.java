@@ -11,6 +11,7 @@ import org.springframework.core.env.Environment;
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
 
 import java.util.Arrays;
+import java.util.List;
 
 @SpringBootApplication
 @EnableMongoRepositories
@@ -39,12 +40,11 @@ public class ResultTrackingApplication implements CommandLineRunner {
     @Override
     public void run(String... args) {
 
-        if (Arrays.asList(environment.getActiveProfiles()).contains("dev")) {
+        List<String> profiles = Arrays.asList(environment.getActiveProfiles());
+
+        if (profiles.contains("dev") && profiles.contains("demo")) {
             sequenceRepository.deleteAll();
             repository.deleteAll();
-        }
-
-        if (Arrays.asList(environment.getActiveProfiles()).contains("demo")) {
             participantDummyGenerator.generate();
         }
     }
