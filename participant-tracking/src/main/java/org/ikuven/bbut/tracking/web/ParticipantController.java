@@ -117,6 +117,6 @@ public class ParticipantController {
     }
 
     private TeamDto toTeamDto(Team team) {
-        return TeamDto.of(team.getName(), team.getParticipants(), team.getTotalLaps());
+        return TeamDto.of(team.getName(), team.getParticipants(), team.getTotalCompletedLaps());
     }
 }

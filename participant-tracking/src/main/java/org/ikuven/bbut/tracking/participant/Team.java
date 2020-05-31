@@ -24,9 +24,12 @@ public class Team {
         return participants;
     }
 
-    public int getTotalLaps() {
+    public int getTotalCompletedLaps() {
         return participants.stream()
-                .mapToInt(participant -> participant.getLaps().size())
+                .mapToInt(participant -> (int) participant.getLaps().stream()
+                        .filter(lap -> lap.getState().equals(LapState.COMPLETED))
+                        .count()
+                )
                 .sum();
     }
 }

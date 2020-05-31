@@ -9,7 +9,6 @@ import org.springframework.stereotype.Component;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Component
 public class ParticipantService {
@@ -51,7 +50,7 @@ public class ParticipantService {
                         .sort(Comparator.comparing(participant -> participant.getLaps().size(), Comparator.reverseOrder())));
 
         return new ArrayList<>(teams.entrySet().stream()
-                .sorted(Map.Entry.comparingByValue(Comparator.comparing(Team::getTotalLaps, Comparator.reverseOrder())))
+                .sorted(Map.Entry.comparingByValue(Comparator.comparing(Team::getTotalCompletedLaps, Comparator.reverseOrder())))
                 .collect(Collectors.toMap(
                         Map.Entry::getKey,
                         Map.Entry::getValue,
