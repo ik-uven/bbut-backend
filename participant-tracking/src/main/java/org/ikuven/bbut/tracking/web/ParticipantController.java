@@ -61,6 +61,19 @@ public class ParticipantController {
                 );
     }
 
+    @GetMapping(path = "/participants/teams", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<TeamDto>> getAllTeams() {
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .header("Access-Control-Allow-Origin", "*")
+                .body(
+                        participantService.getAllTeams().stream()
+                                .map(this::toTeamDto)
+                                .collect(Collectors.toList())
+                );
+    }
+
     @GetMapping(path = "/participants/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<ParticipantDto> getParticipant(@PathVariable(value = "id") long participantId) {
         return ResponseEntity.ok(toDto(participantService.getParticipant(participantId)));
@@ -101,5 +114,9 @@ public class ParticipantController {
 
     private ParticipantDto toDto(Participant participant) {
         return ParticipantDto.of(participant.getId(), participant.getFirstName(), participant.getLastName(), participant.getClub(), participant.getTeam(), participant.getGender(), participant.getParticipantState(), participant.getLaps());
+    }
+
+    private TeamDto toTeamDto(Team team) {
+        return TeamDto.of(team.getName(), team.getParticipants(), team.getTotalLaps());
     }
 }

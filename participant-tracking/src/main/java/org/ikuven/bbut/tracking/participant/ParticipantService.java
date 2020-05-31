@@ -7,10 +7,9 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Component
 public class ParticipantService {
@@ -33,6 +32,33 @@ public class ParticipantService {
                         .thenComparing(participant -> participant.getLastLapState().ordinal())
                 )
                 .collect(Collectors.toList());
+    }
+
+    public List<Team> getAllTeams() {
+
+        Map<String, Team> teams = new LinkedHashMap<>();
+
+        repository.findAll(Sort.by(Sort.Direction.ASC, "team", "firstName")).stream()
+                .filter(Objects::nonNull)
+                .filter(participant -> !participant.getTeam().isEmpty())
+                .forEach(participant -> {
+                    teams.computeIfAbsent(participant.getTeam(), Team::of);
+                    teams.get(participant.getTeam()).getParticipants().add(participant);
+                });
+
+        teams.values()
+                .forEach(team -> team.getParticipants()
+                        .sort(Comparator.comparing(participant -> participant.getLaps().size(), Comparator.reverseOrder())));
+
+        return new ArrayList<>(teams.entrySet().stream()
+                .sorted(Map.Entry.comparingByValue(Comparator.comparing(Team::getTotalLaps, Comparator.reverseOrder())))
+                .collect(Collectors.toMap(
+                        Map.Entry::getKey,
+                        Map.Entry::getValue,
+                        (oldValue, newValue) -> oldValue, LinkedHashMap::new)
+                )
+                .values());
+
     }
 
     private Comparator<Participant> onNumberOfLaps() {
