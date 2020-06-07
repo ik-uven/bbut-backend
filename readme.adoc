@@ -6,7 +6,7 @@ Applikationen _participant result tracking_ används av Bunketorp Backyard Ultra
 
 == Resultatvy
 
-Resultatvyn listar aktuellt resultat för en given tidpunkt, den uppdateras per automatik när backend-servern får in ny data om löpare. Vyn lämpar sig väl för storbildsskärm på arena, eller kan avvändas mer småskaligt i sekreteriat.
+Resultatvyn listar aktuellt resultat vid en given tidpunkt, den uppdateras per automatik när backend-servern får in ny data om löpare. Vyn lämpar sig väl för storbildsskärm på arena, eller kan avvändas mer småskaligt i sekreteriat.
 
 .Exempel på resultvy innan tävlingsstart
 image::bbut-result-tracker.png[]
@@ -16,7 +16,7 @@ image::bbut-result-tracker-live.png[]
 
 == Administrationsvy
 
-Administrationsvyn är gränssnittet som används för registrera nya uppgifter om varv och status för deltagare. Den används av funktionärer i samband med varvsmålgång, antingen genom att använda en dedikerad dator, eller genom att ladda in sidan i mobiltelefonens webbläsare (kräver att mobiltelefon är kopplat till samma wifi-router som server).  
+Administrationsvyn är gränssnittet som används för registrera nya uppgifter om varv och status för deltagare. Den används av funktionärer i samband med varvmålgång, antingen genom att använda en dedikerad dator, eller genom att ladda in sidan i mobiltelefons webbläsare (kräver att mobiltelefon är uppkopplad till samma wifi-router som server).
 
 .Exempel på adminstrationsvy innan start
 image::bbut-result-tracker-admin-full.png[]
