@@ -1,0 +1,19 @@
+= Mongo DB queries and updates
+
+Installing Mongo DB::
+
+Mac: https://docs.mongodb.com/manual/tutorial/install-mongodb-on-os-x/
+
+Mongo DB connect on server::
+
+[source,text]
+----
+mongo mongodb://$[hostlist]/$[database]?authSource=$[authSource] --username $[username]
+----
+
+Update team for participant::
+
+[source,text]
+----
+db.participants.updateOne({ _id: 7}, {$set: {"team": "Mother's finest"}})
+----

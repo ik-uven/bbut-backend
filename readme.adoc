@@ -1,68 +1,51 @@
-= bbut-backend
+= Participant result tracking
+:toc: left
+:imagesdir: documentation/images
 
-== Participant tracking
+Applikationen _participant result tracking_ används av Bunketorp Backyard Ultra Trail under tävling. Den registrerar information om utförda varv samt annan status för varje deltagare.
 
-=== Mongo DB queries and updates
+Användargränsnittet består huvudsakligen av två vyer, _resultatvy_ och _aminstrationsvy_.
 
-Installing Mongo DB::
+== Resultatvy
 
-Mac: https://docs.mongodb.com/manual/tutorial/install-mongodb-on-os-x/
+Resultatvyn listar aktuellt resultat för en given tidpunkt, den uppdateras per automatik när backend-servern får in ny data om löpare.
 
-Mongo DB connect on server::
+.Exempel på resultvy innan tävlingsstart
+image::bbut-result-tracker.png[]
 
-[source,text]
-----
-mongo mongodb://$[hostlist]/$[database]?authSource=$[authSource] --username $[username]
-----
+.Exempel på resultatvy under tävling
+image::bbut-result-tracker-live.png[]
 
-Update team for participant::
+== Administrationsvy
 
-[source,text]
-----
-db.participants.updateOne({ _id: 7}, {$set: {"team": "Mother's finest"}})
-----
+Administrationsvyn är gränssnittet som används för registrera nya uppgifter om varv och status för deltagare. Den används av funktionärer i samband med varvsmålgång, antingen genom att använda en dedikerad dator, eller genom att ladda in sidan i mobiltelefonens webbläsare (kräver att mobiltelefon är kopplat till samma wifi-router som server).  
 
+.Exempel på adminstrationsvy innan start
+image::bbut-result-tracker-admin-full.png[]
 
-=== Curl
+.Beskrivning av knappfunktioner
+image::bbut-result-tracker-admin.png[]
 
-Register participant::
+== Interaktionsflöde under tävling
 
-[source,curl]
-----
-curl -X POST -H 'content-type: application/json' -d '{"firstName": "Ken", "lastName": "Alexandersson", "team": "IK Uven"}' http://localhost:8080/api/participants | jq
-----
+Före tävlingstart::
 
-Change participant's state::
+. Vid utlämning av nummerlapp registreras deltagare som aktiv genom att klicka på `Aktivera`
 
-[source,curl]
-----
-curl -X PUT -H 'content-type: application/json' http://localhost:8080/api/participants/1/states/STARTED | jq
-----
+. Strax innan tävlingsstart registreras eventuella deltagare som inte infunnit sig som ej startade genom att klicka på `Ej start`
 
-Get all participants::
+Under tävling::
 
-[source,curl]
-----
-curl http://localhost:8080/api/participants | jq
-----
+. Vid varvsmålgång registreras löpare enligt följande:
+.. Ett godkänt varv registreras genom att klicka `+`
+.. Ett icke godkänt varv registreras genom att klicka `x`. Detta resulterar också i att löpare erhåller status _Avslutat_
 
-Add lap for participant::
+. Löpare som efter godkänt varv anmäler att de inte längre tänker deltaga, registreras genom att klicka på `Avsluta`
 
-[source,curl]
-----
-curl -d '{"finishTime":"2020-08-08T12:53:00", "lapState":"COMPLETED"}' -H "Content-Type: application/json" -X PUT http://localhost:8080/api/participants/3/laps  | jq
-----
+Om felaktig varvsinformation registreras, klickas knappen `-` för att ta bort det senaste registrerade varvet. Därefter kan man återigen registrera genom `+` eller `x`.
 
-Change lap state for participant::
+Om en deltagare felaktigt registrerats för icke godkänt varv `x`, måste löparen återigen registeras som aktiv genom att klicka `Aktivera`. Då blir knappen `-` klickbar igen och det går att ta bort varvet och ersätta med ett godkänt (`+`).
 
-[source,curl]
-----
-curl -H "Content-Type: application/json" -X PUT http://localhost:8080/api/participants/3/laps/2/states/COMPLETED  | jq
-----
+Om deltagare felaktigt har registrerats som avlutad genom knappen `Avslutat`, kan löparen återaktiveras genom att klicka `Aktivera`.
 
-Delete lap for participant::
-
-[source,curl]
-----
-curl -X DELETE http://localhost:8080/api/participants/3/laps/2  | jq
-----
+Värt att notera är att knappar kommer att vara aktiva eller inaktiva beroende på status. Till exempel så är varvsknapparna `+ x -` inaktiverade för löpare som inte är aktiva, för att undvika felstämpling.
