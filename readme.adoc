@@ -2,13 +2,11 @@
 :toc: left
 :imagesdir: documentation/images
 
-Applikationen _participant result tracking_ används av Bunketorp Backyard Ultra Trail under tävling. Den registrerar information om utförda varv samt annan status för varje deltagare.
-
-Användargränsnittet består huvudsakligen av två vyer, _resultatvy_ och _aminstrationsvy_.
+Applikationen _participant result tracking_ används av Bunketorp Backyard Ultra Trail under tävling. Den registrerar information om utförda varv samt annan status för varje deltagare.  Användargränsnittet består huvudsakligen av två vyer, _resultatvy_ och _aminstrationsvy_.
 
 == Resultatvy
 
-Resultatvyn listar aktuellt resultat för en given tidpunkt, den uppdateras per automatik när backend-servern får in ny data om löpare.
+Resultatvyn listar aktuellt resultat för en given tidpunkt, den uppdateras per automatik när backend-servern får in ny data om löpare. Vyn lämpar sig väl för storbildsskärm på arena, eller kan avvändas mer småskaligt i sekreteriat.
 
 .Exempel på resultvy innan tävlingsstart
 image::bbut-result-tracker.png[]
@@ -30,9 +28,9 @@ image::bbut-result-tracker-admin.png[]
 
 Före tävlingstart::
 
-. Vid utlämning av nummerlapp registreras deltagare som aktiv genom att klicka på `Aktivera`
+. Vid utlämning av nummerlapp registreras deltagare som _aktiv_ genom att klicka på `Aktivera`
 
-. Strax innan tävlingsstart registreras eventuella deltagare som inte infunnit sig som ej startade genom att klicka på `Ej start`
+. Strax innan tävlingsstart registreras icke närvarande deltagare som _ej startade_ genom att klicka på `Ej start`
 
 Under tävling::
 
@@ -46,6 +44,6 @@ Om felaktig varvsinformation registreras, klickas knappen `-` för att ta bort d
 
 Om en deltagare felaktigt registrerats för icke godkänt varv `x`, måste löparen återigen registeras som aktiv genom att klicka `Aktivera`. Då blir knappen `-` klickbar igen och det går att ta bort varvet och ersätta med ett godkänt (`+`).
 
-Om deltagare felaktigt har registrerats som avlutad genom knappen `Avslutat`, kan löparen återaktiveras genom att klicka `Aktivera`.
+Om deltagare felaktigt har registrerats som avlutad genom knappen `Avsluta`, kan löparen återaktiveras genom att klicka `Aktivera`.
 
 Värt att notera är att knappar kommer att vara aktiva eller inaktiva beroende på status. Till exempel så är varvsknapparna `+ x -` inaktiverade för löpare som inte är aktiva, för att undvika felstämpling.
