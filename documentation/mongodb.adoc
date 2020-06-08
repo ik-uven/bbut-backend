@@ -4,11 +4,16 @@ Installing Mongo DB::
 
 Mac: https://docs.mongodb.com/manual/tutorial/install-mongodb-on-os-x/
 
+Docker: https://hub.docker.com/r/andresvidal/rpi3-mongodb3
+
 Mongo DB connect on server::
 
 [source,text]
 ----
 mongo mongodb://$[hostlist]/$[database]?authSource=$[authSource] --username $[username]
+
+# if using credentials in mongo cli
+db.auth("admin", "adminpassword")
 ----
 
 Update team for participant::
