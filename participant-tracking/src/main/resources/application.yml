@@ -1,6 +1,6 @@
 spring:
   application:
-    name: result-tracker
+    name: participant-tracker
 
   data:
     mongodb:
@@ -17,5 +17,8 @@ spring:
   data:
     mongodb:
       database: test
+#      authentication-database: admin
+#      username: admin
+#      password: bbutinbunketorp
 
 
