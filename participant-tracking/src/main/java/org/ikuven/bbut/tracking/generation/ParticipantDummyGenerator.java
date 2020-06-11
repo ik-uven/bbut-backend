@@ -2,10 +2,17 @@ package org.ikuven.bbut.tracking.generation;
 
 import org.ikuven.bbut.tracking.participant.Gender;
 import org.ikuven.bbut.tracking.participant.ParticipantService;
+import org.ikuven.bbut.tracking.repository.DatabaseSequenceRepository;
+import org.ikuven.bbut.tracking.repository.ParticipantRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Profile;
+import org.springframework.core.env.Environment;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.PostConstruct;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -17,8 +24,11 @@ import java.util.stream.Collector;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Profile("dev & demo")
 @Component
 public class ParticipantDummyGenerator {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(ParticipantDummyGenerator.class);
 
     private final List<String> shuffledFemaleGivenNames;
     private final List<String> shuffledMaleGivenNames;
@@ -26,11 +36,18 @@ public class ParticipantDummyGenerator {
     private final List<String> shuffledClubs;
     private final List<String> shuffledTeams;
 
+    private final ParticipantRepository repository;
+    private final DatabaseSequenceRepository sequenceRepository;
     private final ParticipantService participantService;
 
+    private final Environment environment;
+
     @Autowired
-    private ParticipantDummyGenerator(ParticipantService participantService) {
+    private ParticipantDummyGenerator(ParticipantRepository repository, DatabaseSequenceRepository sequenceRepository, ParticipantService participantService, Environment environment) {
+        this.repository = repository;
+        this.sequenceRepository = sequenceRepository;
         this.participantService = participantService;
+        this.environment = environment;
 
         shuffledFemaleGivenNames = readNames("names-givenname-women.txt")
                 .collect(toShuffledStream())
@@ -53,9 +70,15 @@ public class ParticipantDummyGenerator {
                 .collect(Collectors.toList());
     }
 
+    @PostConstruct
     public void generate() {
 
-        for (int i = 1; i <= 8; i++) {
+        sequenceRepository.deleteAll();
+        repository.deleteAll();
+
+        int amountToGenerate = environment.getProperty("demo.participants-to-generate", Integer.class, 8);
+
+        for (int i = 1; i <= amountToGenerate; i++) {
             String newGivenNames;
             Gender gender;
             String newsSurname = generateLastName();
@@ -72,6 +95,8 @@ public class ParticipantDummyGenerator {
 
             participantService.registerParticipant(newGivenNames, newsSurname, club, team, gender, 1974);
         }
+
+        LOGGER.info("Generated {} demo participants", amountToGenerate);
     }
 
     public String generateFemaleGivenNames() {

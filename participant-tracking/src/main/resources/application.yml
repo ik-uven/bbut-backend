@@ -21,4 +21,10 @@ spring:
 #      username: admin
 #      password: bbutinbunketorp
 
+---
+spring:
+  profiles: demo
+
+demo:
+ participants-to-generate: 8
 
