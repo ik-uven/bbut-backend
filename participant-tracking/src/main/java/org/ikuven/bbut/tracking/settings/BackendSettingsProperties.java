@@ -12,12 +12,12 @@ import javax.annotation.PostConstruct;
 @Data
 @Configuration
 @PropertySource("classpath:application.yml")
-@ConfigurationProperties(prefix = "ui-settings")
-public class UiSettingsProperties {
+@ConfigurationProperties(prefix = "backend-settings")
+public class BackendSettingsProperties {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(UiSettingsProperties.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(BackendSettingsProperties.class);
 
-    private ResultView resultView;
+    private Laps laps;
 
     @PostConstruct
     private void logSettings() {
@@ -25,7 +25,7 @@ public class UiSettingsProperties {
     }
 
     @Data
-    public static class ResultView {
-        private int numberOfColumns;
+    public static class Laps {
+        private long registrationGracePeriod;
     }
 }

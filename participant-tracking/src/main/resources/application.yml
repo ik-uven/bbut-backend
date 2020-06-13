@@ -10,7 +10,7 @@ ui-settings:
   result-view:
     number-of-columns: 26
 
-participant:
+backend-settings:
   laps:
     registration-grace-period: 15
 

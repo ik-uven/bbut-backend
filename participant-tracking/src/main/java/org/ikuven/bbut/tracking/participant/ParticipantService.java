@@ -1,6 +1,7 @@
 package org.ikuven.bbut.tracking.participant;
 
 import org.ikuven.bbut.tracking.repository.ParticipantRepository;
+import org.ikuven.bbut.tracking.settings.BackendSettingsProperties;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.data.domain.Sort;
@@ -13,14 +14,14 @@ import java.util.stream.Collectors;
 @Component
 public class ParticipantService {
 
-    private ParticipantRepository repository;
+    private final ParticipantRepository repository;
 
-    private Environment environment;
+    private final BackendSettingsProperties backendSettingsProperties;
 
     @Autowired
-    public ParticipantService(ParticipantRepository repository, Environment environment) {
+    public ParticipantService(ParticipantRepository repository, BackendSettingsProperties backendSettingsProperties) {
         this.repository = repository;
-        this.environment = environment;
+        this.backendSettingsProperties = backendSettingsProperties;
     }
 
     public List<Participant> getAllParticipants() {
@@ -114,7 +115,7 @@ public class ParticipantService {
                 .reduce((first, second) -> second);
 
         if (lastLap.isPresent()) {
-            long gracePeriod = environment.getProperty("participant.laps.registration-grace-period", Long.class, 15L);
+            long gracePeriod = backendSettingsProperties.getLaps().getRegistrationGracePeriod();
             alreadyRegistered = registrationTime.isBefore(lastLap.get().getRegistrationTime().plusMinutes(gracePeriod));
         }
 
