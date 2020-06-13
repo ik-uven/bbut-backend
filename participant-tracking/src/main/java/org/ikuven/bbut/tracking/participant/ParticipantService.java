@@ -114,7 +114,7 @@ public class ParticipantService {
                 .reduce((first, second) -> second);
 
         if (lastLap.isPresent()) {
-            long gracePeriod = environment.getProperty("participant.lap.registration-grace-period", Long.class, 15L);
+            long gracePeriod = environment.getProperty("participant.laps.registration-grace-period", Long.class, 15L);
             alreadyRegistered = registrationTime.isBefore(lastLap.get().getRegistrationTime().plusMinutes(gracePeriod));
         }
 
