@@ -65,11 +65,14 @@ public class Participant {
 
     }
 
-    public LapState getLastLapState() {
-        Lap lastLap = laps.stream()
+    public Lap getLastLap() {
+        return laps.stream()
                 .reduce((first, second) -> second)
                 .orElse(null);
+    }
 
+    public LapState getLastLapState() {
+        Lap lastLap = getLastLap();
         return lastLap != null ? lastLap.getState() : LapState.NONE;
     }
 

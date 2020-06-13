@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static org.ikuven.bbut.tracking.participant.ParticipantEvent.*;
+
 @RestController
 @RequestMapping(path = "/api")
 public class ParticipantController {
@@ -31,7 +33,7 @@ public class ParticipantController {
 
         Participant participant = participantService.registerParticipant(participantInput.getFirstName(), participantInput.getLastName(), participantInput.getClub(), participantInput.getTeam(), gender, participantInput.getBirthYear());
 
-        eventPublisher.publishEvent(participant);
+        eventPublisher.publishEvent(of(EventId.REGISTERED, participant, String.format("participantId %d", participant.getId())));
 
         return ResponseEntity
                 .status(HttpStatus.CREATED)
@@ -43,7 +45,7 @@ public class ParticipantController {
 
         Participant participant = participantService.setState(participantId, participantState);
 
-        eventPublisher.publishEvent(participant);
+        eventPublisher.publishEvent(of(EventId.CHANGED_STATE, participant, String.format("state: %s", participantState)));
 
         return ResponseEntity.ok(toDto(participant));
     }
@@ -84,7 +86,7 @@ public class ParticipantController {
 
         Participant participant = participantService.saveLap(participantId, lapInput.getLapState(), ClientOrigin.valueOf(origin.toUpperCase()));
 
-        eventPublisher.publishEvent(participant);
+        eventPublisher.publishEvent(of(EventId.SAVED_LAP, participant, String.format("lapNumber: %d lapState: %s", participant.getLastLap().getNumber(), participant.getLastLap().getState())));
 
         return ResponseEntity
                 .status(HttpStatus.OK)
@@ -97,7 +99,7 @@ public class ParticipantController {
 
         Participant participant = participantService.updateLapState(participantId, lapNumber, lapState);
 
-        eventPublisher.publishEvent(participant);
+        eventPublisher.publishEvent(of(EventId.CHANGED_LAP_STATE, participant, String.format("lapNumber: %d  lapState: %s", lapNumber, lapState)));
 
         return ResponseEntity.ok(toDto(participant));
     }
@@ -107,7 +109,7 @@ public class ParticipantController {
 
         Participant participant = participantService.deleteLap(participantId, lapNumber);
 
-        eventPublisher.publishEvent(participant);
+        eventPublisher.publishEvent(of(EventId.DELETED_LAP, participant, String.format("lapNumber %d", lapNumber)));
 
         return ResponseEntity.ok(toDto(participant));
     }

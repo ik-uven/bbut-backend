@@ -2,6 +2,7 @@ package org.ikuven.bbut.tracking.websocket;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.ikuven.bbut.tracking.participant.Participant;
+import org.ikuven.bbut.tracking.participant.ParticipantEvent;
 import org.ikuven.bbut.tracking.participant.ParticipantService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.event.EventListener;
@@ -27,8 +28,7 @@ public class LiveController {
 
     @Async
     @EventListener
-    public void myListener(Participant participant) throws Exception {
-
+    public void myListener(ParticipantEvent event) throws Exception {
         this.simpMessagingTemplate.convertAndSend("/topics/results", objectMapper.writeValueAsString(participantService.getAllParticipants()));
     }
 }

@@ -6,6 +6,10 @@ spring:
     mongodb:
       database: local
 
+logging:
+  file:
+    path: /tmp/participant-tracker
+
 ui-settings:
   result-view:
     number-of-columns: 26
@@ -13,7 +17,6 @@ ui-settings:
 backend-settings:
   laps:
     registration-grace-period: 15
-
 ---
 spring:
   profiles: dev
