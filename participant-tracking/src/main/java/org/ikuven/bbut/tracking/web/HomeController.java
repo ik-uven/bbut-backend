@@ -10,7 +10,7 @@ import java.util.Map;
 @Controller
 public class HomeController {
  
-    @RequestMapping(value = {"/","/admin", "/results/**"})
+    @RequestMapping(value = {"/","/admin", "/results/**", "/reader"})
     public String index() {
         return "/index.html";
     }
