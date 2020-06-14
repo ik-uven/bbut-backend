@@ -1,6 +1,8 @@
 package org.ikuven.bbut.tracking.websocket;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.ikuven.bbut.tracking.imports.ImportEvent;
 import org.ikuven.bbut.tracking.participant.Participant;
 import org.ikuven.bbut.tracking.participant.ParticipantEvent;
 import org.ikuven.bbut.tracking.participant.ParticipantService;
@@ -28,7 +30,13 @@ public class LiveController {
 
     @Async
     @EventListener
-    public void myListener(ParticipantEvent event) throws Exception {
+    public void participantListener(ParticipantEvent event) throws Exception {
+        this.simpMessagingTemplate.convertAndSend("/topics/results", objectMapper.writeValueAsString(participantService.getAllParticipants()));
+    }
+
+    @Async
+    @EventListener
+    public void importListener(ImportEvent event) throws Exception {
         this.simpMessagingTemplate.convertAndSend("/topics/results", objectMapper.writeValueAsString(participantService.getAllParticipants()));
     }
 }

@@ -15,5 +15,6 @@ public class UiSettingsDto {
     @AllArgsConstructor(staticName = "of")
     public static class ResultViewDto {
         private int numberOfColumns;
+        private boolean showTeamsColumn;
     }
 }

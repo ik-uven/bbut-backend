@@ -40,7 +40,7 @@ public class ParticipantService {
 
         repository.findAll(Sort.by(Sort.Direction.ASC, "team", "firstName")).stream()
                 .filter(Objects::nonNull)
-                .filter(participant -> !participant.getTeam().isEmpty())
+                .filter(participant -> participant.getTeam() != null && !participant.getTeam().isEmpty())
                 .forEach(participant -> {
                     teams.computeIfAbsent(participant.getTeam(), Team::of);
                     teams.get(participant.getTeam()).getParticipants().add(participant);

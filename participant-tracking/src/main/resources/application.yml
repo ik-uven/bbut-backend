@@ -13,6 +13,7 @@ logging:
 ui-settings:
   result-view:
     number-of-columns: 26
+    show-teams-column: true
 
 backend-settings:
   laps:

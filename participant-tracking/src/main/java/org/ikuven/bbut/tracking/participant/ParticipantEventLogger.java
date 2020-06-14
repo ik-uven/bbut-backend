@@ -15,7 +15,7 @@ public class ParticipantEventLogger {
 
     @Async
     @EventListener
-    public void eventListener(ParticipantEvent event) {
+    public void participantEventListener(ParticipantEvent event) {
         log.info("{}: event participant {} {} {} - {}", timeStampToLocalDateTime(event.getTimestamp()), event.getParticipant().getId(), event.getEventId(), event.getMessage(), event.getSource());
     }
 

@@ -3,11 +3,9 @@ package org.ikuven.bbut.tracking.imports;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
-import org.ikuven.bbut.tracking.participant.Gender;
-import org.ikuven.bbut.tracking.participant.Participant;
-import org.ikuven.bbut.tracking.participant.ParticipantService;
-import org.ikuven.bbut.tracking.participant.ParticipantState;
+import org.ikuven.bbut.tracking.participant.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -16,16 +14,14 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.nio.charset.StandardCharsets;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-import static java.util.function.Predicate.*;
+import static org.ikuven.bbut.tracking.imports.ImportEvent.*;
 
 @Slf4j
 @RestController
@@ -36,10 +32,13 @@ public class ImportsController {
 
     private final ParticipantService participantService;
 
+    private final ApplicationEventPublisher eventPublisher;
+
     @Autowired
-    public ImportsController(ObjectMapper objectMapper, ParticipantService participantService) {
+    public ImportsController(ObjectMapper objectMapper, ParticipantService participantService, ApplicationEventPublisher eventPublisher) {
         this.objectMapper = objectMapper;
         this.participantService = participantService;
+        this.eventPublisher = eventPublisher;
     }
 
     @PostMapping(consumes = "multipart/form-data", produces = "application/json")
@@ -56,6 +55,8 @@ public class ImportsController {
                     .body(resultAsJson(importsResult));
         }
 
+        saveIncomingFile(multipartFiles.get(0));
+
         InputStream uploadedInputStream = multipartFiles.get(0).getInputStream();
 
         List<Participant> registeredParticipants = new ArrayList<>();
@@ -70,9 +71,23 @@ public class ImportsController {
                     registeredParticipants.add(registered);
                 });
 
+        eventPublisher.publishEvent(ImportEvent.of(registeredParticipants, EventId.IMPORTED, "imported participants"));
+
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(registeredParticipants);
+    }
+
+    private void saveIncomingFile(MultipartFile file) throws IOException {
+        String path = String.format("/tmp/participant-tracker/imported-%s-%s", LocalDateTime.now(), file.getOriginalFilename());
+        File convertFile = new File(path);
+        convertFile.createNewFile();
+
+        try (FileOutputStream outputStream = new FileOutputStream(convertFile)) {
+            outputStream.write(file.getBytes());
+        }
+
+        log.info(String.format("Saved a copy of the import file to %s", path));
     }
 
     private Participant prepareParticipant(String line) {

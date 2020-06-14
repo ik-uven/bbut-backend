@@ -27,5 +27,6 @@ public class UiSettingsProperties {
     @Data
     public static class ResultView {
         private int numberOfColumns;
+        private boolean showTeamsColumn;
     }
 }

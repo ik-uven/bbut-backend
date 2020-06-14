@@ -26,7 +26,10 @@ public class UiSettingsController {
 
     private UiSettingsDto toUiSettingsDto(UiSettingsProperties uiSettingsProperties) {
         return UiSettingsDto.of(
-                ResultViewDto.of(uiSettingsProperties.getResultView().getNumberOfColumns())
+                ResultViewDto.of(
+                        uiSettingsProperties.getResultView().getNumberOfColumns(),
+                        uiSettingsProperties.getResultView().isShowTeamsColumn()
+                )
         );
     }
 }
