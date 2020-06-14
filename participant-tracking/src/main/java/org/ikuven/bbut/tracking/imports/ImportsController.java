@@ -2,6 +2,7 @@ package org.ikuven.bbut.tracking.imports;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.extern.slf4j.Slf4j;
 import org.ikuven.bbut.tracking.participant.Gender;
 import org.ikuven.bbut.tracking.participant.Participant;
 import org.ikuven.bbut.tracking.participant.ParticipantService;
@@ -20,11 +21,13 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
 import static java.util.function.Predicate.*;
 
+@Slf4j
 @RestController
 @RequestMapping("/api/participants/imports")
 public class ImportsController {
@@ -40,11 +43,13 @@ public class ImportsController {
     }
 
     @PostMapping(consumes = "multipart/form-data", produces = "application/json")
-    public ResponseEntity<String> importParticipants(@RequestPart("file") List<MultipartFile> multipartFiles) throws IOException {
+    public ResponseEntity<Object> importParticipants(@RequestPart("file") List<MultipartFile> multipartFiles) throws IOException {
 
         if (multipartFiles.size() != 1) {
             String message = String.format("Number of uploaded parts should be 1, was %d.", multipartFiles.size());
             ImportsResult importsResult = ImportsResult.createErrorResult(message);
+
+            log.error(importsResult.toString());
 
             return ResponseEntity
                     .status(HttpStatus.BAD_REQUEST)
@@ -53,16 +58,21 @@ public class ImportsController {
 
         InputStream uploadedInputStream = multipartFiles.get(0).getInputStream();
 
+        List<Participant> registeredParticipants = new ArrayList<>();
         new BufferedReader(new InputStreamReader(uploadedInputStream, StandardCharsets.UTF_8))
                 .lines()
                 .filter(Objects::nonNull)
                 .filter(not(String::isEmpty))
                 .map(this::prepareParticipant)
-                .forEach(participantService::registerParticipant);
+                .forEach(participant -> {
+                    Participant registered = participantService.registerParticipant(participant);
+                    log.info("Imported {} {} {}", registered.getId(), registered.getFirstName(), registered.getLastName());
+                    registeredParticipants.add(registered);
+                });
 
         return ResponseEntity
                 .status(HttpStatus.CREATED)
-                .body(null);
+                .body(registeredParticipants);
     }
 
     private Participant prepareParticipant(String line) {

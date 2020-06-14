@@ -43,4 +43,9 @@ public class ImportsResult {
         }
         return messages;
     }
+
+    @Override
+    public String toString() {
+        return String.format("ImportsResult{valid=%s, messages=%s}", valid, messages);
+    }
 }
