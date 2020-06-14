@@ -62,7 +62,7 @@ public class ImportsController {
         new BufferedReader(new InputStreamReader(uploadedInputStream, StandardCharsets.UTF_8))
                 .lines()
                 .filter(Objects::nonNull)
-                .filter(not(String::isEmpty))
+                //.filter(not(String::isEmpty))
                 .map(this::prepareParticipant)
                 .forEach(participant -> {
                     Participant registered = participantService.registerParticipant(participant);
