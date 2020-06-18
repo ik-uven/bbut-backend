@@ -4,7 +4,10 @@ spring:
 
   data:
     mongodb:
-      database: local
+      database: prod
+#      authentication-database: admin
+#      username: admin
+#      password: bbutinbunketorp
 
 logging:
   file:

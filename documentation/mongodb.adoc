@@ -24,3 +24,26 @@ Update team for participant::
 ----
 db.participants.updateOne({ _id: 7}, {$set: {"team": "Mother's finest"}})
 ----
+
+Create backup user::
+[source,text]
+----
+use prod
+
+ db.createUser({user: 'backup_user', pwd: '<password>', roles: [{ role: 'backup',db:'admin'},{role: "restore", db: "admin"}]})
+
+# see also
+db.grantRolesToUser("backup_user", [{role: "restore", db: "admin"}])
+----
+
+Take backup::
+[source,text]
+----
+mongodump --db prod -u backup_user -p <password> -o /tmp/mbackup
+----
+
+Restore backup::
+[source,text]
+----
+mongorestore -d prod -u backup_user -p bbutinbunketorp /tmp/mbackup/prod
+----
