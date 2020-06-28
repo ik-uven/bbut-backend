@@ -9,7 +9,10 @@ public class ParticipantEvent extends ApplicationEvent {
         CHANGED_STATE,
         SAVED_LAP,
         CHANGED_LAP_STATE,
-        DELETED_LAP
+        DELETED_LAP,
+        ADDED_PARTICIPANT,
+        CHANGED_PARTICIPANT,
+        DELETED_PARTICIPANT
     }
 
     private final EventId eventId;

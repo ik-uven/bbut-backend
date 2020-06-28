@@ -26,7 +26,6 @@ public class ParticipantController {
     }
 
     @PostMapping(path = "/participants", consumes = MediaType.APPLICATION_JSON_VALUE)
-
     public ResponseEntity<ParticipantDto> registerParticipant(@RequestBody ParticipantInput participantInput) {
 
         Gender gender = Gender.valueOf(participantInput.getGender());

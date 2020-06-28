@@ -76,6 +76,7 @@ public class ParticipantService {
 
     public Participant registerParticipant(Participant participant) {
         participant.setId(0L);
+        participant.setParticipantState(ParticipantState.REGISTERED);
         return repository.save(participant);
     }
 
