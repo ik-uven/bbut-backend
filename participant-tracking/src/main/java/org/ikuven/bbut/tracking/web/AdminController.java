@@ -2,10 +2,8 @@ package org.ikuven.bbut.tracking.web;
 
 import org.ikuven.bbut.tracking.admin.ParticipantAdminService;
 import org.ikuven.bbut.tracking.participant.Participant;
-import org.ikuven.bbut.tracking.participant.ParticipantEvent;
 import org.ikuven.bbut.tracking.participant.ParticipantService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -14,8 +12,6 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static org.ikuven.bbut.tracking.participant.ParticipantEvent.of;
-
 @RestController
 @RequestMapping(path = "/api/admin")
 public class AdminController {
@@ -23,14 +19,10 @@ public class AdminController {
     private final ParticipantAdminService participantAdminService;
     private final ParticipantService participantService;
 
-    private final ApplicationEventPublisher eventPublisher;
-
-
     @Autowired
-    public AdminController(ParticipantAdminService participantAdminService, ParticipantService participantService, ApplicationEventPublisher eventPublisher) {
+    public AdminController(ParticipantAdminService participantAdminService, ParticipantService participantService) {
         this.participantAdminService = participantAdminService;
         this.participantService = participantService;
-        this.eventPublisher = eventPublisher;
     }
 
     @GetMapping(path = "/participants", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -51,18 +43,27 @@ public class AdminController {
         participantInput.setId(0L);
         Participant participant = participantService.registerParticipant(toParticipant(participantInput));
 
-        eventPublisher.publishEvent(of(ParticipantEvent.EventId.ADDED_PARTICIPANT, participant, String.format("participantId %d", participant.getId())));
-
         return ResponseEntity.ok().body(toDto(participant));
     }
 
     @PutMapping(path = "/participants/{id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<ParticipantAdminDto> updateParticipant(@PathVariable("id") long participantId, @RequestBody ParticipantUpdateInput participantInput) {
+
+        participantInput.setId(participantId);
+
         Participant participant = participantAdminService.updateParticipant(toParticipant(participantInput));
 
-        eventPublisher.publishEvent(of(ParticipantEvent.EventId.CHANGED_PARTICIPANT, participant, String.format("participantId %d", participant.getId())));
-
         return ResponseEntity.ok().body(toDto(participant));
+    }
+
+    @DeleteMapping(path = "/participants/{id}")
+    public ResponseEntity<String> deleteParticipant(@PathVariable("id") long participantId) {
+
+        participantAdminService.deleteParticipant(participantId);
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .build();
     }
 
     private Participant toParticipant(ParticipantUpdateInput input) {
@@ -74,6 +75,6 @@ public class AdminController {
     }
 
     private ParticipantAdminDto toDto(Participant participant) {
-        return ParticipantAdminDto.of(participant.getId(), participant.getFirstName(), participant.getLastName(), participant.getClub(), participant.getTeam(), participant.getGender());
+        return ParticipantAdminDto.of(participant.getId(), participant.getFirstName(), participant.getLastName(), participant.getClub(), participant.getTeam(), participant.getGender(), participant.getParticipantState());
     }
 }

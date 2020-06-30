@@ -3,13 +3,15 @@ package org.ikuven.bbut.tracking.participant;
 import org.ikuven.bbut.tracking.repository.ParticipantRepository;
 import org.ikuven.bbut.tracking.settings.BackendSettingsProperties;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.env.Environment;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
+
+import static org.ikuven.bbut.tracking.participant.ParticipantEvent.of;
 
 @Component
 public class ParticipantService {
@@ -18,10 +20,13 @@ public class ParticipantService {
 
     private final BackendSettingsProperties backendSettingsProperties;
 
+    private final ApplicationEventPublisher eventPublisher;
+
     @Autowired
-    public ParticipantService(ParticipantRepository repository, BackendSettingsProperties backendSettingsProperties) {
+    public ParticipantService(ParticipantRepository repository, BackendSettingsProperties backendSettingsProperties, ApplicationEventPublisher eventPublisher) {
         this.repository = repository;
         this.backendSettingsProperties = backendSettingsProperties;
+        this.eventPublisher = eventPublisher;
     }
 
     public List<Participant> getAllParticipants() {
@@ -71,20 +76,32 @@ public class ParticipantService {
     }
 
     public Participant registerParticipant(String firstName, String lastName, String club, String team, Gender gender, Integer birthYear) {
-        return repository.save(Participant.of(0L, firstName, lastName, club, team, gender, birthYear, ParticipantState.REGISTERED));
+        Participant participant = repository.save(Participant.of(0L, firstName, lastName, club, team, gender, birthYear, ParticipantState.REGISTERED));
+
+        eventPublisher.publishEvent(of(ParticipantEvent.EventId.REGISTERED, participant, String.format("participantId %d", participant.getId())));
+
+        return participant;
     }
 
     public Participant registerParticipant(Participant participant) {
         participant.setId(0L);
         participant.setParticipantState(ParticipantState.REGISTERED);
-        return repository.save(participant);
+        Participant savedParticipant = repository.save(participant);
+
+        eventPublisher.publishEvent(of(ParticipantEvent.EventId.ADDED_PARTICIPANT, savedParticipant, String.format("participantId %d", savedParticipant.getId())));
+
+        return savedParticipant;
     }
 
     public Participant setState(long participantId, ParticipantState participantState) {
         Participant participant = getParticipant(participantId);
         participant.setParticipantState(participantState);
 
-        return repository.save(participant);
+        Participant savedParticipant = repository.save(participant);
+
+        eventPublisher.publishEvent(of(ParticipantEvent.EventId.CHANGED_STATE, savedParticipant, String.format("state: %s", participantState)));
+
+        return savedParticipant;
     }
 
     public Participant saveLap(long participantId, LapState lapState, ClientOrigin clientOrigin) {
@@ -103,6 +120,8 @@ public class ParticipantService {
             }
 
             participant = repository.save(participant);
+
+            eventPublisher.publishEvent(of(ParticipantEvent.EventId.SAVED_LAP, participant, String.format("lapNumber: %d lapState: %s", participant.getLastLap().getNumber(), participant.getLastLap().getState())));
         }
 
         return participant;
@@ -130,6 +149,8 @@ public class ParticipantService {
         if (participant.getLaps().size() > 0) {
             participant.getLaps().remove(lapNumber - 1);
             participant = repository.save(participant);
+
+            eventPublisher.publishEvent(of(ParticipantEvent.EventId.DELETED_LAP, participant, String.format("lapNumber %d", lapNumber)));
         }
 
         return participant;
@@ -140,6 +161,10 @@ public class ParticipantService {
         Participant participant = getParticipant(participantId);
         participant.updateLapState(lapState, lapNumber);
 
-        return repository.save(participant);
+        Participant savedParticipant = repository.save(participant);
+
+        eventPublisher.publishEvent(of(ParticipantEvent.EventId.CHANGED_LAP_STATE, savedParticipant, String.format("lapNumber: %d  lapState: %s", lapNumber, lapState)));
+
+        return savedParticipant;
     }
 }
