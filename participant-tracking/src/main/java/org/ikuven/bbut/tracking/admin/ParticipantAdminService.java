@@ -44,7 +44,7 @@ public class ParticipantAdminService {
 
         Participant savedParticipant = repository.save(participant);
 
-        eventPublisher.publishEvent(of(ParticipantEvent.EventId.CHANGED_PARTICIPANT, savedParticipant, String.format("participantId %d", savedParticipant.getId())));
+        eventPublisher.publishEvent(of(ParticipantEvent.Type.CHANGED_PARTICIPANT, savedParticipant, "Changed participant profile data"));
 
         return savedParticipant;
     }
@@ -57,7 +57,7 @@ public class ParticipantAdminService {
         }
 
         repository.deleteById(participant.getId());
-        eventPublisher.publishEvent(of(ParticipantEvent.EventId.DELETED_PARTICIPANT, participant, String.format("participantId %d", participant.getId())));
+        eventPublisher.publishEvent(of(ParticipantEvent.Type.DELETED_PARTICIPANT, participant, String.format("participantId %d", participant.getId())));
 
         return participant;
     }

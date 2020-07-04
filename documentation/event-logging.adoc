@@ -1,0 +1,6 @@
+
+----
+cat participant-event.log | jq -c 'select( .participantId == 2 )'
+
+cat participant-event.log | jq -c 'select( .participantId == 2 and .event == "SAVED_LAP" )'
+----

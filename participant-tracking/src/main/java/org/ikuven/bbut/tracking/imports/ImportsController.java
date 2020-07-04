@@ -3,7 +3,10 @@ package org.ikuven.bbut.tracking.imports;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
-import org.ikuven.bbut.tracking.participant.*;
+import org.ikuven.bbut.tracking.participant.Gender;
+import org.ikuven.bbut.tracking.participant.Participant;
+import org.ikuven.bbut.tracking.participant.ParticipantService;
+import org.ikuven.bbut.tracking.participant.ParticipantState;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.http.HttpStatus;
@@ -21,7 +24,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-import static org.ikuven.bbut.tracking.imports.ImportEvent.*;
+import static org.ikuven.bbut.tracking.imports.ImportEvent.EventId;
 
 @Slf4j
 @RestController
@@ -79,7 +82,7 @@ public class ImportsController {
     }
 
     private void saveIncomingFile(MultipartFile file) throws IOException {
-        String path = String.format("/tmp/participant-tracker/imported-%s-%s", LocalDateTime.now(), file.getOriginalFilename());
+        String path = String.format("participant-tracker-imported-%s-%s", LocalDateTime.now(), file.getOriginalFilename());
         File convertFile = new File(path);
         convertFile.createNewFile();
 

@@ -11,7 +11,10 @@ spring:
 
 logging:
   file:
-    path: /tmp/participant-tracker
+    name: /tmp/logs/participant-tracker.log
+  level:
+    org.ikuven.bbut.tracking: INFO
+    org.springframework.web: INFO
 
 ui-settings:
   result-view:
@@ -37,5 +40,13 @@ spring:
   profiles: demo
 
 demo:
- participants-to-generate: 8
+ participants-to-generate: 0
 
+---
+spring:
+  profiles: debug
+
+logging:
+  level:
+    org.ikuven.bbut.tracking: DEBUG
+    org.springframework.web: DEBUG

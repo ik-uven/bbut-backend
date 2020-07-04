@@ -1,42 +1,44 @@
 package org.ikuven.bbut.tracking.participant;
 
-import org.springframework.context.ApplicationEvent;
+import lombok.Value;
+import lombok.extern.slf4j.Slf4j;
 
-public class ParticipantEvent extends ApplicationEvent {
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 
-    public enum EventId {
-        REGISTERED,
+@Slf4j
+@Value
+public class ParticipantEvent {
+
+    public enum Type {
+        REGISTERED_PARTICIPANT,
         CHANGED_STATE,
         SAVED_LAP,
         CHANGED_LAP_STATE,
         DELETED_LAP,
-        ADDED_PARTICIPANT,
         CHANGED_PARTICIPANT,
-        DELETED_PARTICIPANT
+        DELETED_PARTICIPANT;
     }
 
-    private final EventId eventId;
-    private final String message;
+    long participantId;
+    Type type;
+    String message;
+    LocalDateTime timestamp = Instant.ofEpochMilli(System.currentTimeMillis()).atZone(ZoneId.systemDefault()).toLocalDateTime();
+    Participant source;
 
-    public static ParticipantEvent of(EventId eventId, Participant participant, String message) {
-        return new ParticipantEvent(participant, eventId, message);
+    public static ParticipantEvent of(Type type, Participant participant, String message) {
+        return new ParticipantEvent(participant, type, message);
     }
 
-    private ParticipantEvent(Object source, EventId eventId, String message) {
-        super(source);
-        this.eventId = eventId;
+    private ParticipantEvent(Participant source, Type type, String message) {
+        this.type = type;
         this.message = message;
-    }
+        this.source = source;
+        this.participantId = source != null ? source.getId() : 0L;
 
-    public Participant getParticipant() {
-        return (Participant) getSource();
-    }
-
-    public EventId getEventId() {
-        return eventId;
-    }
-
-    public String getMessage() {
-        return message;
+        if (source == null) {
+            log.warn("The source object of event {} {} was null, this indicates a programming error", type, message);
+        }
     }
 }

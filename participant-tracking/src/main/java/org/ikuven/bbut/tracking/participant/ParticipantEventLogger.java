@@ -1,25 +1,31 @@
 package org.ikuven.bbut.tracking.participant;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.event.EventListener;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
-
-import java.time.Instant;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
 
 @Slf4j
 @Component
 public class ParticipantEventLogger {
 
-    @Async
-    @EventListener
-    public void participantEventListener(ParticipantEvent event) {
-        log.info("{}: event participant {} {} {} - {}", timeStampToLocalDateTime(event.getTimestamp()), event.getParticipant().getId(), event.getEventId(), event.getMessage(), event.getSource());
+    private final ObjectMapper objectMapper;
+
+    @Autowired
+    public ParticipantEventLogger(ObjectMapper objectMapper) {
+        this.objectMapper = objectMapper;
     }
 
-    private LocalDateTime timeStampToLocalDateTime(long timestamp) {
-        return Instant.ofEpochMilli(timestamp).atZone(ZoneId.systemDefault()).toLocalDateTime();
+    @Async
+    @EventListener
+    public void participantEventListener(ParticipantEvent event) throws JsonProcessingException {
+        log.info(toJson(event));
+    }
+
+    String toJson(ParticipantEvent event) throws JsonProcessingException {
+        return objectMapper.writeValueAsString(event);
     }
 }

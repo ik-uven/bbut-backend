@@ -13,7 +13,7 @@ Import participant from csv::
 
 [source,curl]
 ----
-curl -X POST -F file=@bbut-2020-participants.csv http://localhost:8080/api/participants/imports | jq
+curl -X POST -F file=@bbut-2020-registered-official.csv http://localhost:8080/api/participants/imports | jq
 ----
 
 Change participant's state::

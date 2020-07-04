@@ -1,5 +1,6 @@
 package org.ikuven.bbut.tracking.participant;
 
+import lombok.extern.slf4j.Slf4j;
 import org.ikuven.bbut.tracking.repository.ParticipantRepository;
 import org.ikuven.bbut.tracking.settings.BackendSettingsProperties;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +14,7 @@ import java.util.stream.Collectors;
 
 import static org.ikuven.bbut.tracking.participant.ParticipantEvent.of;
 
+@Slf4j
 @Component
 public class ParticipantService {
 
@@ -76,11 +78,7 @@ public class ParticipantService {
     }
 
     public Participant registerParticipant(String firstName, String lastName, String club, String team, Gender gender, Integer birthYear) {
-        Participant participant = repository.save(Participant.of(0L, firstName, lastName, club, team, gender, birthYear, ParticipantState.REGISTERED));
-
-        eventPublisher.publishEvent(of(ParticipantEvent.EventId.REGISTERED, participant, String.format("participantId %d", participant.getId())));
-
-        return participant;
+        return registerParticipant(Participant.of(0L, firstName, lastName, club, team, gender, birthYear, ParticipantState.REGISTERED));
     }
 
     public Participant registerParticipant(Participant participant) {
@@ -88,7 +86,9 @@ public class ParticipantService {
         participant.setParticipantState(ParticipantState.REGISTERED);
         Participant savedParticipant = repository.save(participant);
 
-        eventPublisher.publishEvent(of(ParticipantEvent.EventId.ADDED_PARTICIPANT, savedParticipant, String.format("participantId %d", savedParticipant.getId())));
+        log.debug("Registered participant {}", participant);
+
+        eventPublisher.publishEvent(of(ParticipantEvent.Type.REGISTERED_PARTICIPANT, savedParticipant, "Registered participant"));
 
         return savedParticipant;
     }
@@ -99,7 +99,9 @@ public class ParticipantService {
 
         Participant savedParticipant = repository.save(participant);
 
-        eventPublisher.publishEvent(of(ParticipantEvent.EventId.CHANGED_STATE, savedParticipant, String.format("state: %s", participantState)));
+        log.debug("Changed state of participant {}", savedParticipant);
+
+        eventPublisher.publishEvent(of(ParticipantEvent.Type.CHANGED_STATE, savedParticipant, String.format("state: %s", participantState)));
 
         return savedParticipant;
     }
@@ -121,7 +123,9 @@ public class ParticipantService {
 
             participant = repository.save(participant);
 
-            eventPublisher.publishEvent(of(ParticipantEvent.EventId.SAVED_LAP, participant, String.format("lapNumber: %d lapState: %s", participant.getLastLap().getNumber(), participant.getLastLap().getState())));
+            log.debug("Saved lap for participant {}", participant);
+
+            eventPublisher.publishEvent(of(ParticipantEvent.Type.SAVED_LAP, participant, String.format("lapNumber: %d lapState: %s", participant.getLastLap().getNumber(), participant.getLastLap().getState())));
         }
 
         return participant;
@@ -150,7 +154,9 @@ public class ParticipantService {
             participant.getLaps().remove(lapNumber - 1);
             participant = repository.save(participant);
 
-            eventPublisher.publishEvent(of(ParticipantEvent.EventId.DELETED_LAP, participant, String.format("lapNumber %d", lapNumber)));
+            log.debug("Deleted lap number {} for participant {}", lapNumber, participant);
+
+            eventPublisher.publishEvent(of(ParticipantEvent.Type.DELETED_LAP, participant, String.format("lapNumber %d", lapNumber)));
         }
 
         return participant;
@@ -163,7 +169,9 @@ public class ParticipantService {
 
         Participant savedParticipant = repository.save(participant);
 
-        eventPublisher.publishEvent(of(ParticipantEvent.EventId.CHANGED_LAP_STATE, savedParticipant, String.format("lapNumber: %d  lapState: %s", lapNumber, lapState)));
+        log.debug("Updated lap state for lap number {} to {} for participant {}", lapNumber, lapState, participant);
+
+        eventPublisher.publishEvent(of(ParticipantEvent.Type.CHANGED_LAP_STATE, savedParticipant, String.format("lapNumber: %d  lapState: %s", lapNumber, lapState)));
 
         return savedParticipant;
     }
