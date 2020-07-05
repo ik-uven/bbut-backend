@@ -25,6 +25,14 @@ Update team for participant::
 db.participants.updateOne({ _id: 7}, {$set: {"team": "Mother's finest"}})
 ----
 
+Update lap time for participant::
+----
+db.participants.update(
+    {"_id": 1, "laps.number": 3},
+    { "$set": { "laps.$.registrationTime": "2020-07-04T12:44:23.836Z" } }
+)
+----
+
 Create backup user::
 [source,text]
 ----

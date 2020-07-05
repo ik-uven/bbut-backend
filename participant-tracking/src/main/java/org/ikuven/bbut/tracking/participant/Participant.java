@@ -7,7 +7,7 @@ import org.springframework.data.annotation.Transient;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.time.LocalDateTime;
-import java.util.Collections;
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -27,7 +27,7 @@ public class Participant {
     private Gender gender;
     private Integer birthYear;
     private ParticipantState participantState;
-    private List<Lap> laps = Collections.emptyList();
+    private List<Lap> laps = new ArrayList<>();
 
     public static Participant of(long id, String firstName, String lastName, String club, String team, Gender gender, Integer birthYear, ParticipantState participantState) {
         return new Participant(id, firstName, lastName, club, team, gender, birthYear, participantState);

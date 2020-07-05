@@ -41,6 +41,12 @@ public class ParticipantService {
                 .collect(Collectors.toList());
     }
 
+    public List<Participant> getAllQualifiedParticipants() {
+        return repository.findAll(Sort.by(Sort.Direction.ASC, "firstName")).stream()
+                .filter(participant -> participant.getParticipantState().equals(ParticipantState.ACTIVE) || participant.getParticipantState().equals(ParticipantState.RESIGNED))
+                .collect(Collectors.toList());
+    }
+
     public List<Team> getAllTeams() {
 
         Map<String, Team> teams = new LinkedHashMap<>();
@@ -80,8 +86,8 @@ public class ParticipantService {
     public Participant registerParticipant(String firstName, String lastName, String club, String team, Gender gender, Integer birthYear) {
         return registerParticipant(Participant.of(0L, firstName, lastName, club, team, gender, birthYear, ParticipantState.REGISTERED));
     }
-
     public Participant registerParticipant(Participant participant) {
+
         participant.setId(0L);
         participant.setParticipantState(ParticipantState.REGISTERED);
         Participant savedParticipant = repository.save(participant);

@@ -1,6 +1,5 @@
 package org.ikuven.bbut.tracking.participant;
 
-import lombok.val;
 import org.ikuven.bbut.tracking.repository.ParticipantRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -11,16 +10,9 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.Sort;
 
 import java.time.LocalDateTime;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.groups.Tuple.*;
-import static org.ikuven.bbut.tracking.participant.LapState.COMPLETED;
-import static org.ikuven.bbut.tracking.participant.LapState.OVERDUE;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
@@ -40,6 +32,31 @@ class ParticipantServiceTest {
     private ParticipantService participantService;
 
     @Test
+    @DisplayName("should return correctly filtered participants having state ACTIVE or RESIGNED")
+    void getAllQualifiedParticipants() {
+
+        List<Participant> participants = List.of(
+                createParticipant(1, ParticipantState.ACTIVE),
+                createParticipant(2, ParticipantState.NO_SHOW),
+                createParticipant(3, ParticipantState.REGISTERED),
+                createParticipant(4, ParticipantState.RESIGNED)
+                );
+
+        when(repository.findAll(any(Sort.class))).thenReturn(participants);
+
+        List<Participant> qualifiedParticipants = participantService.getAllQualifiedParticipants();
+
+        assertThat(qualifiedParticipants)
+                .isNotNull()
+                .extracting(Participant::getId)
+                .containsExactly(1L, 4L);
+    }
+
+    private Participant createParticipant(long id, ParticipantState state) {
+        return Participant.of(id, null, null, null, null, null, null, state);
+    }
+
+    /*    @Test
     @DisplayName("should correctly sort when all have completed")
     void getAllParticipants1() {
         List<Lap> laps = createLaps(COMPLETED, COMPLETED, COMPLETED);
