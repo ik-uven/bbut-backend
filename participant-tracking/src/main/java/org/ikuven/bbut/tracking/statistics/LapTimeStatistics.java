@@ -14,21 +14,21 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Data
-public class LapStatistics {
+public class LapTimeStatistics {
 
     private Participant participant;
     private List<LapDuration> lapDurations = new ArrayList<>();
     private int averageLapInMinutes;
 
-    public static LapStatistics of(Participant participant) {
+    public static LapTimeStatistics of(Participant participant) {
         if (participant == null) {
             throw new IllegalArgumentException("Cannot generate statistics for null participant");
         }
 
-        return new LapStatistics(participant);
+        return new LapTimeStatistics(participant);
     }
 
-    private LapStatistics(Participant participant) {
+    private LapTimeStatistics(Participant participant) {
         this.participant = participant;
         this.lapDurations = calculateLapsDuration(participant.getLaps());
         this.averageLapInMinutes = calculateAverageLapTime();

@@ -1,8 +1,5 @@
 package org.ikuven.bbut.tracking.statistics;
 
-import org.ikuven.bbut.tracking.participant.Lap;
-import org.ikuven.bbut.tracking.participant.LapState;
-import org.ikuven.bbut.tracking.participant.ParticipantService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -18,46 +15,39 @@ import java.util.stream.Collectors;
 @RequestMapping(path = "/api/participants/statistics")
 public class StatisticsController {
 
-    private final ParticipantService participantService;
     private final StatisticsService statisticsService;
 
     @Autowired
-    public StatisticsController(ParticipantService participantService, StatisticsService statisticsService) {
-        this.participantService = participantService;
+    public StatisticsController(StatisticsService statisticsService) {
         this.statisticsService = statisticsService;
     }
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<LapStatisticsDto>> getStatistics() {
-        List<LapStatisticsDto> lapStatisticsDtos = participantService.getAllQualifiedParticipants().stream()
-                .map(statisticsService::calculateLapStatistics)
-                .map(this::toDto)
+    public ResponseEntity<List<LapTimeStatisticsDto>> getLapTimeStatistics() {
+        List<LapTimeStatisticsDto> lapTimeStatisticsDtos = statisticsService.calculateLapTimeStatistics().stream()
+                .map(this::toLapTimeStatisticsDto)
                 .collect(Collectors.toList());
 
-        return ResponseEntity.ok(lapStatisticsDtos);
+        return ResponseEntity.ok(lapTimeStatisticsDtos);
     }
 
-    @GetMapping(path = "/lapcounts", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<LapStatisticsCountDto> getCountsPerLap() {
-        List<CountsPerLapDto> countsPerLapDtos = new ArrayList<>();
+    @GetMapping(path = "/participantsperlap", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<LapStatisticsCountDto> getParticipantsPerLapStatistics() {
+        List<ParticipantsPerLapDto> participantsPerLapDtos = new ArrayList<>();
 
-        int totalParticipants = participantService.getAllQualifiedParticipants().size();
+        int totalActivatedParticipants = statisticsService.getTotalActivatedParticipants();
 
-        participantService.getAllQualifiedParticipants().stream()
-                .flatMap(participant -> participant.getLaps().stream())
-                .filter(lap -> lap.getState().equals(LapState.COMPLETED))
-                .map(Lap::getNumber)
-                .collect(Collectors.groupingBy(lapNumber -> lapNumber, Collectors.counting()))
-                .forEach((lapNumber, count) -> countsPerLapDtos.add(toCountsPerLapDto(lapNumber, count)));
+        statisticsService.calculateParticipantsPerLapStatistics()
+                    .forEach((lapNumber, count) -> participantsPerLapDtos.add(toParticipantsPerLapDto(lapNumber, count)));
 
-        return ResponseEntity.ok(LapStatisticsCountDto.of(totalParticipants, countsPerLapDtos));
+        return ResponseEntity.ok(LapStatisticsCountDto.of(totalActivatedParticipants, participantsPerLapDtos));
     }
 
-    private CountsPerLapDto toCountsPerLapDto(Integer lapNumber, Long count) {
-        return CountsPerLapDto.of(lapNumber, count);
+    private ParticipantsPerLapDto toParticipantsPerLapDto(Integer lapNumber, Long count) {
+        return ParticipantsPerLapDto.of(lapNumber, count);
     }
 
-    private LapStatisticsDto toDto(LapStatistics lapStatistics) {
-        return LapStatisticsDto.of(lapStatistics);
+    private LapTimeStatisticsDto toLapTimeStatisticsDto(LapTimeStatistics lapTimeStatistics) {
+        return LapTimeStatisticsDto.of(lapTimeStatistics);
     }
 }

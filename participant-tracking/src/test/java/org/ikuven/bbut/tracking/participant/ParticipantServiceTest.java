@@ -44,7 +44,7 @@ class ParticipantServiceTest {
 
         when(repository.findAll(any(Sort.class))).thenReturn(participants);
 
-        List<Participant> qualifiedParticipants = participantService.getAllQualifiedParticipants();
+        List<Participant> qualifiedParticipants = participantService.getActivatedParticipants();
 
         assertThat(qualifiedParticipants)
                 .isNotNull()

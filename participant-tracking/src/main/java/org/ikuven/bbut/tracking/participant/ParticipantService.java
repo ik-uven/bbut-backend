@@ -41,7 +41,7 @@ public class ParticipantService {
                 .collect(Collectors.toList());
     }
 
-    public List<Participant> getAllQualifiedParticipants() {
+    public List<Participant> getActivatedParticipants() {
         return repository.findAll(Sort.by(Sort.Direction.ASC, "firstName")).stream()
                 .filter(participant -> participant.getParticipantState().equals(ParticipantState.ACTIVE) || participant.getParticipantState().equals(ParticipantState.RESIGNED))
                 .collect(Collectors.toList());

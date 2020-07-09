@@ -10,6 +10,6 @@ import java.util.List;
 public class LapStatisticsCountDto {
 
     int totalParticipants;
-    List<CountsPerLapDto> countsPerLaps;
+    List<ParticipantsPerLapDto> countsPerLaps;
 
 }

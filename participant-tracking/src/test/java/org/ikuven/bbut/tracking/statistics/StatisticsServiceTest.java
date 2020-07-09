@@ -5,6 +5,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.Duration;
@@ -12,14 +13,18 @@ import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.entry;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class StatisticsServiceTest {
 
     public static final LocalDateTime REG_TIME = LocalDateTime.of(2020, 8, 8, 12, 0, 0);
+
+    @Mock
+    private ParticipantService participantService;
 
     @InjectMocks
     private StatisticsService statisticsService;
@@ -34,12 +39,15 @@ class StatisticsServiceTest {
         participant.addLap(REG_TIME.plusHours(1).plusMinutes(45), LapState.COMPLETED);
         participant.addLap(REG_TIME.plusHours(1).plusMinutes(50), LapState.COMPLETED);
 
-        LapStatistics lapStatistics = statisticsService.calculateLapStatistics(participant);
+        when(participantService.getActivatedParticipants()).thenReturn(List.of(participant));
 
-        assertThat(lapStatistics)
-                .isNotNull();
+        List<LapTimeStatistics> lapTimeStatistics = statisticsService.calculateLapTimeStatistics();
 
-        assertThat(lapStatistics.getLapDurations())
+        assertThat(lapTimeStatistics)
+                .isNotNull()
+                .hasSize(1);
+
+        assertThat(lapTimeStatistics.get(0).getLapDurations())
                 .containsExactly(
                         LapDuration.of(1, Duration.of(35, ChronoUnit.MINUTES)),
                         LapDuration.of(2, Duration.of(45, ChronoUnit.MINUTES)),
@@ -57,19 +65,23 @@ class StatisticsServiceTest {
         participant.addLap(REG_TIME.plusHours(1).plusMinutes(45), LapState.COMPLETED);
         participant.addLap(REG_TIME.plusHours(1).plusMinutes(51), LapState.COMPLETED);
 
-        LapStatistics lapStatistics = statisticsService.calculateLapStatistics(participant);
+        when(participantService.getActivatedParticipants()).thenReturn(List.of(participant));
 
-        assertThat(lapStatistics.getAverageLapInMinutes())
+        List<LapTimeStatistics> lapTimeStatistics = statisticsService.calculateLapTimeStatistics();
+
+        assertThat(lapTimeStatistics.get(0).getAverageLapInMinutes())
                 .isEqualTo(44);
     }
 
     @Test
-    void name() {
+    @DisplayName("should return correct lapcount")
+    void correctLapCount() {
         Participant participant1 = createParticipant();
         participant1.addLap(null, LapState.COMPLETED);
         participant1.addLap(null, LapState.COMPLETED);
         participant1.addLap(null, LapState.COMPLETED);
         participant1.addLap(null, LapState.OVERDUE);
+
         Participant participant2 = createParticipant();
         participant2.addLap(null, LapState.COMPLETED);
         participant2.addLap(null, LapState.COMPLETED);
@@ -78,16 +90,19 @@ class StatisticsServiceTest {
         participant2.addLap(null, LapState.COMPLETED);
         participant2.addLap(null, LapState.COMPLETED);
 
-        List<Participant> participants = List.of(participant1, participant2);
+        when(participantService.getActivatedParticipants()).thenReturn(List.of(participant1, participant2));
 
-        Map<Integer, Long> counts =
-                participants.stream()
-                        .flatMap(participant -> participant.getLaps().stream())
-                        .filter(lap -> lap.getState().equals(LapState.COMPLETED))
-                        .map(Lap::getNumber)
-                        .collect(Collectors.groupingBy(lapNumber -> lapNumber, Collectors.counting()));
+        Map<Integer, Long> lapCounts = statisticsService.calculateParticipantsPerLapStatistics();
 
-        System.out.println(counts);
+        assertThat(lapCounts)
+                .containsExactly(
+                        entry(1, 2L),
+                        entry(2, 2L),
+                        entry(3, 2L),
+                        entry(4, 1L),
+                        entry(5, 1L),
+                        entry(6, 1L)
+                );
     }
 
     private Participant createParticipant() {

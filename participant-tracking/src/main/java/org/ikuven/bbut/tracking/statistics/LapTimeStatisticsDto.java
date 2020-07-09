@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Data
-public class LapStatisticsDto {
+public class LapTimeStatisticsDto {
 
     private long participantId;
     private String firstName;
@@ -18,7 +18,7 @@ public class LapStatisticsDto {
     private List<LapDurationDto> lapDurations;
     private int averageLapInMinutes;
 
-    private LapStatisticsDto(long participantId, String firstName, String lastName, String club, String team, List<LapDuration> lapDurations, int averageLapInMinutes) {
+    private LapTimeStatisticsDto(long participantId, String firstName, String lastName, String club, String team, List<LapDuration> lapDurations, int averageLapInMinutes) {
         this.participantId = participantId;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -28,15 +28,15 @@ public class LapStatisticsDto {
         this.averageLapInMinutes = averageLapInMinutes;
     }
 
-    public static LapStatisticsDto of(LapStatistics lapStatistics) {
-        return new LapStatisticsDto(
-                lapStatistics.getParticipant().getId(),
-                lapStatistics.getParticipant().getFirstName(),
-                lapStatistics.getParticipant().getLastName(),
-                lapStatistics.getParticipant().getClub(),
-                lapStatistics.getParticipant().getTeam(),
-                lapStatistics.getLapDurations(),
-                lapStatistics.getAverageLapInMinutes()
+    public static LapTimeStatisticsDto of(LapTimeStatistics lapTimeStatistics) {
+        return new LapTimeStatisticsDto(
+                lapTimeStatistics.getParticipant().getId(),
+                lapTimeStatistics.getParticipant().getFirstName(),
+                lapTimeStatistics.getParticipant().getLastName(),
+                lapTimeStatistics.getParticipant().getClub(),
+                lapTimeStatistics.getParticipant().getTeam(),
+                lapTimeStatistics.getLapDurations(),
+                lapTimeStatistics.getAverageLapInMinutes()
         );
     }
 

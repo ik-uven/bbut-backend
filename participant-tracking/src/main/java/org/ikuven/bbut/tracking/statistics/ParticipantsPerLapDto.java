@@ -5,7 +5,7 @@ import lombok.Value;
 
 @Value
 @AllArgsConstructor(staticName = "of")
-public class CountsPerLapDto {
+public class ParticipantsPerLapDto {
     Integer lap;
     Long participants;
 }
