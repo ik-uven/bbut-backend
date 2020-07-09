@@ -18,6 +18,12 @@ use admin
 db.auth("admin", "<adminpassword>")
 ----
 
+Set all active::
+
+----
+db.participants.updateMany({},{$set: {"participantState": "ACTIVE"}})
+----
+
 Update team for participant::
 
 [source,text]

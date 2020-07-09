@@ -1,9 +1,6 @@
 package org.ikuven.bbut.tracking.statistics;
 
-import org.ikuven.bbut.tracking.participant.Gender;
-import org.ikuven.bbut.tracking.participant.LapState;
-import org.ikuven.bbut.tracking.participant.Participant;
-import org.ikuven.bbut.tracking.participant.ParticipantState;
+import org.ikuven.bbut.tracking.participant.*;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -13,6 +10,9 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -61,6 +61,33 @@ class StatisticsServiceTest {
 
         assertThat(lapStatistics.getAverageLapInMinutes())
                 .isEqualTo(44);
+    }
+
+    @Test
+    void name() {
+        Participant participant1 = createParticipant();
+        participant1.addLap(null, LapState.COMPLETED);
+        participant1.addLap(null, LapState.COMPLETED);
+        participant1.addLap(null, LapState.COMPLETED);
+        participant1.addLap(null, LapState.OVERDUE);
+        Participant participant2 = createParticipant();
+        participant2.addLap(null, LapState.COMPLETED);
+        participant2.addLap(null, LapState.COMPLETED);
+        participant2.addLap(null, LapState.COMPLETED);
+        participant2.addLap(null, LapState.COMPLETED);
+        participant2.addLap(null, LapState.COMPLETED);
+        participant2.addLap(null, LapState.COMPLETED);
+
+        List<Participant> participants = List.of(participant1, participant2);
+
+        Map<Integer, Long> counts =
+                participants.stream()
+                        .flatMap(participant -> participant.getLaps().stream())
+                        .filter(lap -> lap.getState().equals(LapState.COMPLETED))
+                        .map(Lap::getNumber)
+                        .collect(Collectors.groupingBy(lapNumber -> lapNumber, Collectors.counting()));
+
+        System.out.println(counts);
     }
 
     private Participant createParticipant() {
