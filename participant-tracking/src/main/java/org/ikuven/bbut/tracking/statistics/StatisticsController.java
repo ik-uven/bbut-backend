@@ -31,7 +31,7 @@ public class StatisticsController {
         return ResponseEntity.ok(lapTimeStatisticsDtos);
     }
 
-    @GetMapping(path = "/participantsperlap", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(path = "/completedlaps", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<LapStatisticsCountDto> getParticipantsPerLapStatistics() {
         List<ParticipantsPerLapDto> participantsPerLapDtos = new ArrayList<>();
 
