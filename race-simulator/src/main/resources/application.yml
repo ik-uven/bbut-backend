@@ -1,0 +1,15 @@
+spring:
+  application:
+    name: race-simulator
+
+cron:
+  expression: "* 37 * * * *"
+
+logging:
+  level:
+    org.springframework.web.reactive: INFO
+---
+spring:
+  profiles: dev
+cron:
+  expression: "*/5 * * * * * "

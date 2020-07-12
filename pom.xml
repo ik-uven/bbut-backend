@@ -9,5 +9,6 @@
 
     <modules>
         <module>participant-tracking</module>
+        <module>race-simulator</module>
     </modules>
 </project>
