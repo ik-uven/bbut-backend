@@ -1,6 +1,7 @@
 package org.ikuven.bbut.tracking.web;
 
 import org.ikuven.bbut.tracking.participant.*;
+import org.ikuven.bbut.tracking.settings.BackendSettingsProperties;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -14,9 +15,11 @@ import java.util.stream.Collectors;
 public class ParticipantController {
 
     private final ParticipantService participantService;
+    private final BackendSettingsProperties backendSettingsProperties;
 
-    public ParticipantController(ParticipantService participantService) {
+    public ParticipantController(ParticipantService participantService, BackendSettingsProperties backendSettingsProperties) {
         this.participantService = participantService;
+        this.backendSettingsProperties = backendSettingsProperties;
     }
 
     @PostMapping(path = "/participants", consumes = MediaType.APPLICATION_JSON_VALUE)
@@ -60,6 +63,7 @@ public class ParticipantController {
                 .header("Access-Control-Allow-Origin", "*")
                 .body(
                         participantService.getAllTeams().stream()
+                                .filter(team -> team.getParticipants().size() >= backendSettingsProperties.getTeams().getSize())
                                 .map(this::toTeamDto)
                                 .collect(Collectors.toList())
                 );

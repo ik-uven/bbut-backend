@@ -18,6 +18,7 @@ public class BackendSettingsProperties {
     private static final Logger LOGGER = LoggerFactory.getLogger(BackendSettingsProperties.class);
 
     private Laps laps;
+    private Teams teams;
 
     @PostConstruct
     private void logSettings() {
@@ -27,5 +28,10 @@ public class BackendSettingsProperties {
     @Data
     public static class Laps {
         private long registrationGracePeriod;
+    }
+
+    @Data
+    public static class Teams {
+        private long size;
     }
 }
