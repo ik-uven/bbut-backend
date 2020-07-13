@@ -136,6 +136,6 @@ class StatisticsServiceTest {
     }
 
     private Participant createParticipant() {
-        return Participant.of(2L, "Andie", "Longrunner", "IK Uven", null, Gender.FEMALE, null, ParticipantState.ACTIVE);
+        return Participant.of(2L, "Andie", "Longrunner", "IK Uven", null, ParticipantClass.WOMEN, null, ParticipantState.ACTIVE);
     }
 }

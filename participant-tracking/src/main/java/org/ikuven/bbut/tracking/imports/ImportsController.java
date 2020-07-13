@@ -3,8 +3,8 @@ package org.ikuven.bbut.tracking.imports;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
-import org.ikuven.bbut.tracking.participant.Gender;
 import org.ikuven.bbut.tracking.participant.Participant;
+import org.ikuven.bbut.tracking.participant.ParticipantClass;
 import org.ikuven.bbut.tracking.participant.ParticipantService;
 import org.ikuven.bbut.tracking.participant.ParticipantState;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -99,33 +99,33 @@ public class ImportsController {
         String firstName = capitalizeFirst(candidate[0]);
         String lastName = capitalizeFirst(candidate[1]);
         String club = capitalizeFirst(candidate[2]);
-        Gender gender = toGender(candidate[3]);
+        ParticipantClass participantClass = toGender(candidate[3]);
         String team = capitalizeFirst(candidate[4]);
         LocalDate birthDate = toBirthDate(candidate[5]);
 
-        return Participant.of(0L, firstName, lastName, club, team, gender, birthDate, ParticipantState.REGISTERED);
+        return Participant.of(0L, firstName, lastName, club, team, participantClass, birthDate, ParticipantState.REGISTERED);
     }
 
-    private Gender toGender(String string) {
-        Gender gender;
+    private ParticipantClass toGender(String string) {
+        ParticipantClass participantClass;
 
         switch (string) {
             case "Man":
             case "Herrar":
             case "Men":
-                gender = Gender.MALE;
+                participantClass = ParticipantClass.MEN;
                 break;
             case "Kvinna":
             case "Damer":
             case "Women":
-                gender = Gender.FEMALE;
+                participantClass = ParticipantClass.WOMEN;
                 break;
             default:
-                gender = Gender.UNKNOWN;
+                participantClass = ParticipantClass.UNKNOWN;
                 break;
         }
 
-        return gender;
+        return participantClass;
     }
 
     private LocalDate toBirthDate(String string) {

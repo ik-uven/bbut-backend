@@ -1,9 +1,7 @@
 package org.ikuven.bbut.tracking.statistics;
 
 import lombok.extern.slf4j.Slf4j;
-import org.ikuven.bbut.tracking.participant.Lap;
-import org.ikuven.bbut.tracking.participant.LapState;
-import org.ikuven.bbut.tracking.participant.ParticipantService;
+import org.ikuven.bbut.tracking.participant.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -63,5 +61,12 @@ public class StatisticsService {
 
     LocalDate now() {
         return LocalDate.now();
+    }
+
+    public Map<ParticipantClass, Long> getClassDemographics() {
+        return participantService.getActivatedParticipants().stream()
+                .filter(Objects::nonNull)
+                .filter(participant -> Objects.nonNull(participant.getParticipantClass()))
+                .collect(Collectors.groupingBy(Participant::getParticipantClass, Collectors.counting()));
     }
 }

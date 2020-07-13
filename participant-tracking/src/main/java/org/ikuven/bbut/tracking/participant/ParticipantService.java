@@ -84,8 +84,8 @@ public class ParticipantService {
                 .orElseThrow(() -> new IllegalArgumentException(String.format("No participant found with id %d", participantId)));
     }
 
-    public Participant registerParticipant(String firstName, String lastName, String club, String team, Gender gender, LocalDate birthDate) {
-        return registerParticipant(Participant.of(0L, firstName, lastName, club, team, gender, birthDate, ParticipantState.REGISTERED));
+    public Participant registerParticipant(String firstName, String lastName, String club, String team, ParticipantClass participantClass, LocalDate birthDate) {
+        return registerParticipant(Participant.of(0L, firstName, lastName, club, team, participantClass, birthDate, ParticipantState.REGISTERED));
     }
     public Participant registerParticipant(Participant participant) {
 

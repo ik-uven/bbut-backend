@@ -1,6 +1,6 @@
 package org.ikuven.bbut.tracking.generation;
 
-import org.ikuven.bbut.tracking.participant.Gender;
+import org.ikuven.bbut.tracking.participant.ParticipantClass;
 import org.ikuven.bbut.tracking.participant.ParticipantService;
 import org.ikuven.bbut.tracking.repository.DatabaseSequenceRepository;
 import org.ikuven.bbut.tracking.repository.ParticipantRepository;
@@ -81,20 +81,20 @@ public class ParticipantDummyGenerator {
 
         for (int i = 1; i <= amountToGenerate; i++) {
             String newGivenNames;
-            Gender gender;
+            ParticipantClass participantClass;
             String newsSurname = generateLastName();
             String club = generateClub();
             String team = generateTeam();
 
             if (isEven(getRandomInteger(1, 10))) {
                 newGivenNames = generateFemaleGivenNames();
-                gender = Gender.FEMALE;
+                participantClass = ParticipantClass.WOMEN;
             } else {
                 newGivenNames = generateMaleGivenNames();
-                gender = Gender.MALE;
+                participantClass = ParticipantClass.MEN;
             }
 
-            participantService.registerParticipant(newGivenNames, newsSurname, club, team, gender, LocalDate.of(1974,1,1));
+            participantService.registerParticipant(newGivenNames, newsSurname, club, team, participantClass, LocalDate.of(1974,1,1));
         }
 
         LOGGER.info("Generated {} demo participants", amountToGenerate);

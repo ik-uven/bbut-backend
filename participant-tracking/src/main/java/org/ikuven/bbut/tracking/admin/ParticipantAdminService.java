@@ -40,7 +40,7 @@ public class ParticipantAdminService {
         participant.setLastName(participantToUpdate.getLastName());
         participant.setClub(participantToUpdate.getClub());
         participant.setTeam(participantToUpdate.getTeam());
-        participant.setGender(participantToUpdate.getGender());
+        participant.setParticipantClass(participantToUpdate.getParticipantClass());
 
         Participant savedParticipant = repository.save(participant);
 

@@ -2,7 +2,7 @@ package org.ikuven.bbut.tracking.web;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import org.ikuven.bbut.tracking.participant.Gender;
+import org.ikuven.bbut.tracking.participant.ParticipantClass;
 import org.ikuven.bbut.tracking.participant.ParticipantState;
 
 @Data
@@ -14,6 +14,6 @@ public class ParticipantAdminDto {
     private String lastName;
     private String club;
     private String team;
-    private Gender gender;
+    private ParticipantClass participantClass;
     private ParticipantState participantState;
 }

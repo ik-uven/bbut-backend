@@ -1,7 +1,7 @@
 package org.ikuven.bbut.tracking.participant;
 
-public enum Gender {
+public enum ParticipantClass {
     UNKNOWN,
-    FEMALE,
-    MALE
+    WOMEN,
+    MEN
 }

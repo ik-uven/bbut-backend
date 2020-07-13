@@ -53,7 +53,7 @@ class ParticipantEventLoggerTest {
     @DisplayName("should log the event correctly")
     void shouldLogEvent() throws JsonProcessingException {
 
-        Participant participant = Participant.of(1L, "first", "last", "club", "team", Gender.FEMALE, null, null);
+        Participant participant = Participant.of(1L, "first", "last", "club", "team", ParticipantClass.WOMEN, null, null);
         ParticipantEvent event = ParticipantEvent.of(ParticipantEvent.Type.CHANGED_STATE, participant, "event message");
 
         ArgumentCaptor<ParticipantEvent> eventCaptor = ArgumentCaptor.forClass(ParticipantEvent.class);
@@ -65,7 +65,7 @@ class ParticipantEventLoggerTest {
 
         assertThat(eventLogger.toJson(event))
                 .isNotBlank()
-                .contains(ParticipantEvent.Type.CHANGED_STATE.toString(), "event message", "first", "last", "club", "team", Gender.FEMALE.toString());
+                .contains(ParticipantEvent.Type.CHANGED_STATE.toString(), "event message", "first", "last", "club", "team", ParticipantClass.WOMEN.toString());
 
     }
 }
