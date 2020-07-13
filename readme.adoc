@@ -14,9 +14,9 @@ image::bbut-result-tracker.png[]
 .Exempel på resultatvy under tävling
 image::bbut-result-tracker-live.png[]
 
-== Administrationsvy
+== Registreringsvy
 
-Administrationsvyn är gränssnittet som används för registrera nya uppgifter om varv och status för deltagare. Den används av funktionärer i samband med varvmålgång, antingen genom att använda en dedikerad dator, eller genom att ladda in sidan i mobiltelefons webbläsare (kräver att mobiltelefon är uppkopplad till samma wifi-router som server).
+Registreringsvyn är gränssnittet som används för registrera nya uppgifter om varv och status för deltagare. Den används av funktionärer i samband med varvmålgång, antingen genom att använda en dedikerad dator, eller genom att ladda in sidan i mobiltelefons webbläsare (kräver att mobiltelefon är uppkopplad till samma wifi-router som server).
 
 .Exempel på adminstrationsvy innan start
 image::bbut-result-tracker-admin-full.png[]

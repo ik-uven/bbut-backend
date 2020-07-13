@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @RestController
@@ -41,6 +42,20 @@ public class StatisticsController {
                     .forEach((lapNumber, count) -> participantsPerLapDtos.add(toParticipantsPerLapDto(lapNumber, count)));
 
         return ResponseEntity.ok(LapStatisticsCountDto.of(totalActivatedParticipants, participantsPerLapDtos));
+    }
+
+    @GetMapping(path = "/age", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<AgeStatisticsDto>> getAgeDemographics() {
+
+        return ResponseEntity
+                .ok(toAgeStatisticsDto(statisticsService.getAgeDemographics()));
+    }
+
+    private List<AgeStatisticsDto> toAgeStatisticsDto(Map<String, Long> ageDemographics) {
+        List<AgeStatisticsDto> ageStatisticsDtos = new ArrayList<>();
+        ageDemographics.forEach((ageSpan, count) -> ageStatisticsDtos.add(AgeStatisticsDto.of(ageSpan, count)));
+
+        return ageStatisticsDtos;
     }
 
     private ParticipantsPerLapDto toParticipantsPerLapDto(Integer lapNumber, Long count) {

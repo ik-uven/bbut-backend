@@ -31,9 +31,9 @@ spring:
   data:
     mongodb:
       database: test
-#      authentication-database: admin
-#      username: admin
-#      password: bbutinbunketorp
+      authentication-database: admin
+      username: admin
+      password: bbutinbunketorp
 
 ---
 spring:

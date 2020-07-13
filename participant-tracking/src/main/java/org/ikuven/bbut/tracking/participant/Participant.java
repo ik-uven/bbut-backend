@@ -6,6 +6,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.Transient;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -25,31 +26,31 @@ public class Participant {
     private String club;
     private String team;
     private Gender gender;
-    private Integer birthYear;
+    private LocalDate birthDate;
     private ParticipantState participantState;
     private List<Lap> laps = new ArrayList<>();
 
-    public static Participant of(long id, String firstName, String lastName, String club, String team, Gender gender, Integer birthYear, ParticipantState participantState) {
-        return new Participant(id, firstName, lastName, club, team, gender, birthYear, participantState);
+    public static Participant of(long id, String firstName, String lastName, String club, String team, Gender gender, LocalDate birthDate, ParticipantState participantState) {
+        return new Participant(id, firstName, lastName, club, team, gender, birthDate, participantState);
     }
 
-    public static Participant of(long id, String firstName, String lastName, String club, String team, Gender gender, Integer birthYear, ParticipantState participantState, List<Lap> laps) {
-        return new Participant(id, firstName, lastName, club, team, gender, birthYear, participantState, laps);
+    public static Participant of(long id, String firstName, String lastName, String club, String team, Gender gender, LocalDate birthDate, ParticipantState participantState, List<Lap> laps) {
+        return new Participant(id, firstName, lastName, club, team, gender, birthDate, participantState, laps);
     }
 
-    private Participant(long id, String firstName, String lastName, String club, String team, Gender gender, Integer birthYear, ParticipantState participantState) {
+    private Participant(long id, String firstName, String lastName, String club, String team, Gender gender, LocalDate birthDate, ParticipantState participantState) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
         this.club = club;
         this.team = team;
         this.gender = gender;
-        this.birthYear = birthYear;
+        this.birthDate = birthDate;
         this.participantState = participantState;
     }
 
-    private Participant(long id, String firstName, String lastName, String club, String team, Gender gender, Integer birthYear, ParticipantState participantState, List<Lap> laps) {
-        this(id, firstName, lastName, club, team, gender, birthYear, participantState);
+    private Participant(long id, String firstName, String lastName, String club, String team, Gender gender, LocalDate birthDate, ParticipantState participantState, List<Lap> laps) {
+        this(id, firstName, lastName, club, team, gender, birthDate, participantState);
         this.laps = laps;
     }
 

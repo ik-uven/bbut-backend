@@ -8,6 +8,7 @@ import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -83,8 +84,8 @@ public class ParticipantService {
                 .orElseThrow(() -> new IllegalArgumentException(String.format("No participant found with id %d", participantId)));
     }
 
-    public Participant registerParticipant(String firstName, String lastName, String club, String team, Gender gender, Integer birthYear) {
-        return registerParticipant(Participant.of(0L, firstName, lastName, club, team, gender, birthYear, ParticipantState.REGISTERED));
+    public Participant registerParticipant(String firstName, String lastName, String club, String team, Gender gender, LocalDate birthDate) {
+        return registerParticipant(Participant.of(0L, firstName, lastName, club, team, gender, birthDate, ParticipantState.REGISTERED));
     }
     public Participant registerParticipant(Participant participant) {
 

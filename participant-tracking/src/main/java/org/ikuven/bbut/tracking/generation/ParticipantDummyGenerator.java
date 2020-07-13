@@ -17,6 +17,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.time.LocalDate;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
@@ -93,7 +94,7 @@ public class ParticipantDummyGenerator {
                 gender = Gender.MALE;
             }
 
-            participantService.registerParticipant(newGivenNames, newsSurname, club, team, gender, 1974);
+            participantService.registerParticipant(newGivenNames, newsSurname, club, team, gender, LocalDate.of(1974,1,1));
         }
 
         LOGGER.info("Generated {} demo participants", amountToGenerate);

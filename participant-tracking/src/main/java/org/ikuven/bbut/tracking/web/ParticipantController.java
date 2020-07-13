@@ -24,7 +24,7 @@ public class ParticipantController {
 
         Gender gender = Gender.valueOf(participantInput.getGender());
 
-        Participant participant = participantService.registerParticipant(participantInput.getFirstName(), participantInput.getLastName(), participantInput.getClub(), participantInput.getTeam(), gender, participantInput.getBirthYear());
+        Participant participant = participantService.registerParticipant(participantInput.getFirstName(), participantInput.getLastName(), participantInput.getClub(), participantInput.getTeam(), gender, participantInput.getBirthDate());
 
         return ResponseEntity
                 .status(HttpStatus.CREATED)

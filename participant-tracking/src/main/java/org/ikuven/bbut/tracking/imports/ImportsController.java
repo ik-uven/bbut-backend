@@ -19,6 +19,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -98,12 +99,45 @@ public class ImportsController {
         String firstName = capitalizeFirst(candidate[0]);
         String lastName = capitalizeFirst(candidate[1]);
         String club = capitalizeFirst(candidate[2]);
-        String team = capitalizeFirst(candidate[3]);
-        Gender gender = candidate[4] != null ? Gender.valueOf(candidate[4]) : Gender.UNKNOWN;
-        String town = null; //capitalizeFirst(candidate[5]);
-        Integer birthYear = null; //candidate[6] != null ? Integer.valueOf(candidate[6]) : null;
+        Gender gender = toGender(candidate[3]);
+        String team = capitalizeFirst(candidate[4]);
+        LocalDate birthDate = toBirthDate(candidate[5]);
 
-        return Participant.of(0L, firstName, lastName, club, team, gender, birthYear, ParticipantState.REGISTERED);
+        return Participant.of(0L, firstName, lastName, club, team, gender, birthDate, ParticipantState.REGISTERED);
+    }
+
+    private Gender toGender(String string) {
+        Gender gender;
+
+        switch (string) {
+            case "Man":
+            case "Herrar":
+            case "Men":
+                gender = Gender.MALE;
+                break;
+            case "Kvinna":
+            case "Damer":
+            case "Women":
+                gender = Gender.FEMALE;
+                break;
+            default:
+                gender = Gender.UNKNOWN;
+                break;
+        }
+
+        return gender;
+    }
+
+    private LocalDate toBirthDate(String string) {
+        LocalDate date;
+        try {
+            date = string != null ? LocalDate.parse(string) : null;
+        } catch (Exception e) {
+            date = null;
+            log.warn("Failed to parse birth date string {}", string, e);
+        }
+
+        return date;
     }
 
     private String resultAsJson(ImportsResult importsResult) throws JsonProcessingException {

@@ -6,9 +6,11 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.Duration;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
@@ -26,6 +28,7 @@ class StatisticsServiceTest {
     @Mock
     private ParticipantService participantService;
 
+    @Spy
     @InjectMocks
     private StatisticsService statisticsService;
 
@@ -102,6 +105,33 @@ class StatisticsServiceTest {
                         entry(4, 1L),
                         entry(5, 1L),
                         entry(6, 1L)
+                );
+    }
+
+    @Test
+    @DisplayName("should return age count categorized by age span")
+    void ageDemographics() {
+        Participant participant1 = createParticipant();
+        participant1.setBirthDate(LocalDate.of(1990, 1, 1));
+        Participant participant2 = createParticipant();
+        participant2.setBirthDate(LocalDate.of(1999, 1, 1));
+        Participant participant3 = createParticipant();
+        participant3.setBirthDate(LocalDate.of(1980, 1, 1));
+        Participant participant4 = createParticipant();
+        participant4.setBirthDate(LocalDate.of(1985, 1, 1));
+        Participant participant5 = createParticipant();
+        participant5.setBirthDate(LocalDate.of(1989, 1, 1));
+
+        when(participantService.getActivatedParticipants()).thenReturn(List.of(participant1, participant2, participant3, participant4, participant5));
+        when(statisticsService.now()).thenReturn(LocalDate.of(2020, 1, 1));
+
+        Map<String, Long> ageDemographics = statisticsService.getAgeDemographics();
+
+        assertThat(ageDemographics)
+                .containsExactly(
+                        entry("20-29",1L),
+                        entry("30-39",3L),
+                        entry("40-49",1L)
                 );
     }
 
