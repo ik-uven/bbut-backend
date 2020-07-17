@@ -26,7 +26,7 @@ public class AdminController {
     }
 
     @GetMapping(path = "/participants", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<ParticipantAdminDto>> getAllParticipants() {
+    public ResponseEntity<List<ParticipantDto>> getAllParticipants() {
 
         return ResponseEntity
                 .status(HttpStatus.OK)
@@ -39,7 +39,7 @@ public class AdminController {
     }
 
     @PostMapping(path = "/participants", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<ParticipantAdminDto> registerParticipant(@RequestBody ParticipantUpdateInput participantInput) {
+    public ResponseEntity<ParticipantDto> registerParticipant(@RequestBody ParticipantUpdateInput participantInput) {
         participantInput.setId(0L);
         Participant participant = participantService.registerParticipant(toParticipant(participantInput));
 
@@ -47,7 +47,7 @@ public class AdminController {
     }
 
     @PutMapping(path = "/participants/{id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<ParticipantAdminDto> updateParticipant(@PathVariable("id") long participantId, @RequestBody ParticipantUpdateInput participantInput) {
+    public ResponseEntity<ParticipantDto> updateParticipant(@PathVariable("id") long participantId, @RequestBody ParticipantUpdateInput participantInput) {
 
         participantInput.setId(participantId);
 
@@ -74,7 +74,7 @@ public class AdminController {
         return Participant.of(input.getId(), input.getFirstName(), input.getLastName(), input.getClub(), input.getTeam(), input.getParticipantClass(), null, null);
     }
 
-    private ParticipantAdminDto toDto(Participant participant) {
-        return ParticipantAdminDto.of(participant.getId(), participant.getFirstName(), participant.getLastName(), participant.getClub(), participant.getTeam(), participant.getParticipantClass(), participant.getParticipantState());
+    private ParticipantDto toDto(Participant participant) {
+        return ParticipantDto.of(participant.getId(), participant.getFirstName(), participant.getLastName(), participant.getClub(), participant.getTeam(), participant.getParticipantClass(), participant.getParticipantState(), participant.getLaps());
     }
 }
