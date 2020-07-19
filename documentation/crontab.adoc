@@ -1,0 +1,31 @@
+
+Save crontab:
+
+----
+crontab -l > crontab.save
+
+more crontab.save
+----
+After you're sure you saved a copy, delete your crontab:
+
+----
+crontab -r
+----
+
+Later, you can:
+----
+crontab < crontab.save
+
+crontab -l
+----
+to restore things.
+
+Example of crontab::
+
+----
+0 * * * * cd ~/Development/bbut-backend/script && ./screenshot.sh
+0 * * * * cd ~/Development/bbut-backend/script && ./screenshot.sh http://localhost:8080/results/teams?hideMenu=true ./screens/results-teams.png
+2 * * * * cd ~/Development/bbut-backend/script && /bin/bash ./db-backup.sh <password> >> db-backup.log 2>&1
+
+
+----
