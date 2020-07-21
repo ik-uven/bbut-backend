@@ -66,8 +66,8 @@ public class ImportsController {
         List<Participant> registeredParticipants = new ArrayList<>();
         new BufferedReader(new InputStreamReader(uploadedInputStream, StandardCharsets.UTF_8))
                 .lines()
+                .skip(1)
                 .filter(Objects::nonNull)
-                //.filter(not(String::isEmpty))
                 .map(this::prepareParticipant)
                 .forEach(participant -> {
                     Participant registered = participantService.registerParticipant(participant);
@@ -145,6 +145,10 @@ public class ImportsController {
     }
 
     private String capitalizeFirst(String string) {
-        return string != null && !string.isEmpty() ? string.substring(0, 1).toUpperCase() + string.substring(1) : null;
+        if (string != null && !string.isEmpty()) {
+            string = string.trim();
+            return string.substring(0, 1).toUpperCase() + string.substring(1);
+        }
+        return "";
     }
 }
