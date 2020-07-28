@@ -2,6 +2,9 @@ spring:
   application:
     name: race-simulator
 
+tracking-app:
+  url: http://localhost:8080
+
 cron:
   expression: "* 37 * * * *"
 

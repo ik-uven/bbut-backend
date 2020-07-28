@@ -1,6 +1,7 @@
 package org.ikuven.bbut.racesimulator.client;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
@@ -16,12 +17,18 @@ import java.util.stream.Collectors;
 @Component
 public class RaceClient {
 
-    private final WebClient client = WebClient
-            .builder()
-            .baseUrl("http://localhost:8080")
-            .defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
-            .defaultUriVariables(Collections.singletonMap("url", "http://localhost:8080"))
-            .build();
+    private final WebClient client;
+
+    public RaceClient( @Value("${tracking-app.url}") String url) {
+        log.info(String.format("Setting up client with base url %s", url));
+
+        this.client = WebClient
+                .builder()
+                .baseUrl(url)
+                .defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
+                .defaultUriVariables(Collections.singletonMap("url", url))
+                .build();
+    }
 
     public List<Participant> getActiveParticipants() {
         return getAllParticipants().stream()
