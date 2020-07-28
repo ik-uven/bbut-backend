@@ -25,7 +25,7 @@ backend-settings:
   laps:
     registration-grace-period: 15
   teams:
-    size: 3
+    min-size: 3
 ---
 spring:
   profiles: dev

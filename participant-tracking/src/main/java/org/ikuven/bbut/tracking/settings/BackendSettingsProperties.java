@@ -32,6 +32,6 @@ public class BackendSettingsProperties {
 
     @Data
     public static class Teams {
-        private long size;
+        private long minSize;
     }
 }

@@ -56,17 +56,19 @@ public class ParticipantController {
     }
 
     @GetMapping(path = "/participants/teams", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<TeamDto>> getAllTeams() {
+    public ResponseEntity<TeamWrapperDto> getAllTeams() {
+
+        final var minSize = backendSettingsProperties.getTeams().getMinSize();
+
+        final var teamDtoList = participantService.getAllTeams().stream()
+                .filter(team -> team.getParticipants().size() >= minSize)
+                .map(this::toTeamDto)
+                .collect(Collectors.toList());
 
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .header("Access-Control-Allow-Origin", "*")
-                .body(
-                        participantService.getAllTeams().stream()
-                                .filter(team -> team.getParticipants().size() >= backendSettingsProperties.getTeams().getSize())
-                                .map(this::toTeamDto)
-                                .collect(Collectors.toList())
-                );
+                .body(toTeamWrapperDto(teamDtoList, minSize));
     }
 
     @GetMapping(path = "/participants/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -107,5 +109,9 @@ public class ParticipantController {
 
     private TeamDto toTeamDto(Team team) {
         return TeamDto.of(team.getName(), team.getParticipants(), team.getTotalCompletedLaps());
+    }
+
+    private TeamWrapperDto toTeamWrapperDto(List<TeamDto> teamDtoList, long teamSize) {
+        return TeamWrapperDto.of(teamDtoList, teamSize);
     }
 }
