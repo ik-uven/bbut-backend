@@ -9,7 +9,7 @@ ifndef::imagesdir[:imagesdir: images]
 
 Deltagare kan importeras till applikationen genom att använda en semikolon-separerad csv-fil innehållandes uppgifter för en deltagare per rad.
 
-Första raden i filen är en rubrikrad som namnger fälten som en rad består av. Denna rad kommer att ignoreras vid importen, det är först rad 2 som behöver innehålla den första deltagaren.
+Första raden i filen är en rubrikrad som namnger fälten som en deltagarpost består av. Denna rad kommer att ignoreras vid importen, det är först rad 2 som behöver innehålla den första deltagaren.
 
 .Exempel på csv-fil med 3 deltagare
 [source,csv]
@@ -19,7 +19,6 @@ Pelle;Svensson;Göta Källare;Herrar;;1973-06-19
 Johan;Andersson;;Herrar;;1989-12-09
 Klara;Jönsson;Ultra High;Damer;Team Friskus;1970-05-21
 ----
-
 
 [TIP]
 Microsoft Excel eller motsvarande kalkylprogram kan spara sitt innehåll som csv-filer.
@@ -50,7 +49,7 @@ image::admin1.png[]
 
 - `Ändra` -> Modifiera befintlig deltagare
 
-- `Ta bort` -> Radera deltagare. Notera att det endast går att radera deltagare som ännu ej har fullgjort första varvet.
+- `Ta bort` -> Radera deltagare. Notera att det endast går att radera deltagare som ännu ej har fullgjort första varvet och som är satta i grundstatus _Anmäld_.
 
 [NOTE]
 Knapparna under _Status_ används för att sätta deltagare i rätt status i samband med start, se <<aktivera>>.
@@ -92,7 +91,7 @@ Typisk tågordning:
 .Statusknappar
 image::statusbuttons.png[]
 
-Det går att hoppa mellan olika status obehindrat. Om en deltagare av misstag sätts till en oönskad status, är det möjligt att ändra till önskad status.
+Det går att hoppa mellan olika status obehindrat _innan ett varv har registrerats på deltagaren_. Om en deltagare av misstag sätts till en oönskad status, är det möjligt att ändra till önskad status.
 
 == På tävlingsdagen - efter start
 
@@ -103,7 +102,7 @@ Registreringsvyn på http://<ip-adress>:8080/registrator används för registrer
 Deltagare visas sorterade på startnummer. Endast deltagare med status _Aktiv_ eller _Avslutat_ visas i listan (deltagare med status _Ej start_ och _Anmäld_ visas inte).
 
 .Varvregisteringvy vid start
-image::reg1.png[]
+image::reg1.png[450,450]
 
 Beskrivning av knappar:
 
@@ -118,7 +117,7 @@ Beskrivning av knappar:
 Värt att notera är att knappar kommer att vara aktiva eller inaktiva beroende på status. Till exempel så är varvsknapparna `+ x -` inaktiverade för löpare som inte är aktiva, för att undvika felstämpling.
 
 .Exempel "mitt i loppet", där deltagare 1 har avslutat
-image::reg2.png[]
+image::reg2.png[450,450]
 
 - Vid varvsmålgång registreras löpare enligt följande:
 . Ett godkänt varv registreras genom att klicka `+`
@@ -136,7 +135,7 @@ image::reg2.png[]
 ====
 Om `Prioritera aktiva deltagare` väljs, sorteras listan först på aktiva deltagare, därefter i startnummerordning. Detta underlättar hantering framförallt i senare skede av loppet, då många löpare har avslutat sitt deltagande:
 
-image::reg3.png[]
+image::reg3.png[450,450]
 ====
 
 === Resultatvy (leaderboard)
@@ -147,7 +146,7 @@ Vyn lämpar sig väl för storbildsskärm på arena, eller kan användas mer sm�
 
 image::result1.png[]
 
-Endast deltagare med status _Aktiv_ eller _Avslutat_ visas i listan (deltagare med status _Ej start_ och _Anmäld_ visas inte).
+Endast deltagare med status _Anmäld_, _Aktiv_ eller _Avslutat_ visas i listan (deltagare med status _Ej start_ visas inte).
 
 [TIP]
 ====
