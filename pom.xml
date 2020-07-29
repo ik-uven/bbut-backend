@@ -8,6 +8,7 @@
     <packaging>pom</packaging>
 
     <modules>
+        <module>documentation</module>
         <module>participant-tracking</module>
         <module>race-simulator</module>
     </modules>

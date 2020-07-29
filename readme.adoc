@@ -1,49 +1,11 @@
 = Participant result tracking
 :toc: left
-:imagesdir: documentation/images
+:imagesdir: documentation/src/docs/asciidoc/images
 
-Applikationen _participant result tracking_ används av Bunketorp Backyard Ultra Trail under tävling. Den registrerar information om utförda varv samt annan status för varje deltagare.  Användargränsnittet består huvudsakligen av två vyer, _resultatvy_ och _aminstrationsvy_.
+Applikationen _participant result tracking_ används av Bunketorp Backyard Ultra Trail under tävling. Den registrerar information om utförda varv samt annan status för varje deltagare.
 
-== Resultatvy
+:leveloffset: +1
 
-Resultatvyn listar aktuellt resultat vid en given tidpunkt, den uppdateras per automatik när backend-servern får in ny data om löpare. Vyn lämpar sig väl för storbildsskärm på arena, eller kan avvändas mer småskaligt i sekreteriat.
+include::documentation/src/docs/asciidoc/manual.adoc[]
 
-.Exempel på resultvy innan tävlingsstart
-image::bbut-result-tracker.png[]
-
-.Exempel på resultatvy under tävling
-image::bbut-result-tracker-live.png[]
-
-== Registreringsvy
-
-Registreringsvyn är gränssnittet som används för registrera nya uppgifter om varv och status för deltagare. Den används av funktionärer i samband med varvmålgång, antingen genom att använda en dedikerad dator, eller genom att ladda in sidan i mobiltelefons webbläsare (kräver att mobiltelefon är uppkopplad till samma wifi-router som server).
-
-.Exempel på adminstrationsvy innan start
-image::bbut-result-tracker-admin-full.png[]
-
-.Beskrivning av knappfunktioner
-image::bbut-result-tracker-admin.png[]
-
-== Interaktionsflöde under tävling
-
-Före tävlingstart::
-
-. Vid utlämning av nummerlapp registreras deltagare som _aktiv_ genom att klicka på `Aktivera`
-
-. Strax innan tävlingsstart registreras icke närvarande deltagare som _ej startade_ genom att klicka på `Ej start`
-
-Under tävling::
-
-. Vid varvsmålgång registreras löpare enligt följande:
-.. Ett godkänt varv registreras genom att klicka `+`
-.. Ett icke godkänt varv registreras genom att klicka `x`. Detta resulterar också i att löpare erhåller status _Avslutat_
-
-. Löpare som efter godkänt varv anmäler att de inte längre tänker deltaga, registreras genom att klicka på `Avsluta`
-
-Om felaktig varvsinformation registreras, klickas knappen `-` för att ta bort det senaste registrerade varvet. Därefter kan man återigen registrera genom `+` eller `x`.
-
-Om en deltagare felaktigt registrerats för icke godkänt varv `x`, måste löparen återigen registeras som aktiv genom att klicka `Aktivera`. Då blir knappen `-` klickbar igen och det går att ta bort varvet och ersätta med ett godkänt (`+`).
-
-Om deltagare felaktigt har registrerats som avlutad genom knappen `Avsluta`, kan löparen återaktiveras genom att klicka `Aktivera`.
-
-Värt att notera är att knappar kommer att vara aktiva eller inaktiva beroende på status. Till exempel så är varvsknapparna `+ x -` inaktiverade för löpare som inte är aktiva, för att undvika felstämpling.
+:leveloffset: -1

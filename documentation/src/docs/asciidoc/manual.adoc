@@ -1,0 +1,160 @@
+:toc: left
+ifndef::imagesdir[:imagesdir: images]
+
+= Användarmanual
+
+== Innan tävlingsdagen
+
+=== Importera deltagare
+
+Deltagare kan importeras till applikationen genom att använda en semikolon-separerad csv-fil innehållandes uppgifter för en deltagare per rad.
+
+Första raden i filen är en rubrikrad som namnger fälten som en rad består av. Denna rad kommer att ignoreras vid importen, det är först rad 2 som behöver innehålla den första deltagaren.
+
+.Exempel på csv-fil med 3 deltagare
+[source,csv]
+----
+Förnamn;Efternamn;Klubb;Klass;Lagnamn;Födelsedatum
+Pelle;Svensson;Göta Källare;Herrar;;1973-06-19
+Johan;Andersson;;Herrar;;1989-12-09
+Klara;Jönsson;Ultra High;Damer;Team Friskus;1970-05-21
+----
+
+
+[TIP]
+Microsoft Excel eller motsvarande kalkylprogram kan spara sitt innehåll som csv-filer.
+
+Csv-fil laddas upp och importeras till applikationen genom att anrop ett REST-api. För närvarande görs detta enklast genom att använda `curl` från ett terminalfönster.
+
+.curl syntax för att göra en POST http request
+----
+curl -X POST -F file=@<filnamn>.csv  http://<ip-adress>:8080/api/participants/imports
+----
+
+Ersätt `<filnamn>` med csv-filens namn samt `<ip-adress>` med ip-adress till den dator som kör applikationen.
+
+.Exempel
+----
+curl -X POST -F file=@bbut-2020-registered-official.csv  http://192.168.1.156:8080/api/participants/imports
+----
+
+Importerade deltagare kan sedan administreras från webbläsare, se nästa kapitel.
+
+=== Administera deltagare
+
+Det går att lägga till, ändra och ta bort deltagare från ett webbläsargränssnitt. Sökvägen är http://<ip-adress>/admin.
+
+image::admin1.png[]
+
+- `Ny...` -> Skapa ny deltagare
+
+- `Ändra` -> Modifiera befintlig deltagare
+
+- `Ta bort` -> Radera deltagare. Notera att det endast går att radera deltagare som ännu ej har fullgjort första varvet.
+
+[NOTE]
+Knapparna under _Status_ används för att sätta deltagare i rätt status i samband med start, se <<aktivera>>.
+
+== På tävlingsdagen - före start
+
+[[aktivera]]
+=== Aktivera deltagare
+
+Det finns fyra statuslägen som varje enskild deltagare kan vara i.
+
+
+|===
+|Status |Beskrivning
+
+|Anmäld (REGISTERED)
+|Deltagare är anmäld. Denna status fås per automatik när deltagare importeras eller skapas.
+
+|Ej start (NO_SHOW)
+|Deltagare kom ej till start.
+
+|Aktiv (ACTIVE)
+|Deltagare har kommit till start och är aktiv i loppet.
+
+|Avslutad (RESIGNED)
+|Deltagare har avslutat loppet.
+|===
+
+Statusknapparna på http://<ip-adress>/admin används för att sätta deltagare i korrekt status.
+
+Typisk tågordning:
+
+. Innan start anmäler sig deltagare vid sekreteriat för att hämta ut nummerlapp. I samband med detta ska deltagaren sättas i status _Aktiv_ genom att trycka `Aktivera`.
+
+. Eventuella deltagare som inte har infunnit sig vid start anges som ej startande genom att trycka `Ej start`.
+
+. Om deltagare under loppet anmäler att de vill avsluta, ska detta registreras genom att trycka `Avsluta`
+
+.Statusknappar
+image::statusbuttons.png[]
+
+Det går att hoppa mellan olika status obehindrat. Om en deltagare av misstag sätts till en oönskad status, är det möjligt att ändra till önskad status.
+
+== På tävlingsdagen - efter start
+
+=== Varvregistrering
+
+Registreringsvyn på http://<ip-adress>:8080/registrator används för registrera nya uppgifter om varv och status för deltagare. Den används av funktionärer i samband med varvmålgång, antingen genom att använda en dedikerad dator, eller genom att ladda in sidan i mobiltelefons webbläsare (kräver att mobiltelefon är uppkopplad till samma wifi-router som server).
+
+Deltagare visas sorterade på startnummer. Endast deltagare med status _Aktiv_ eller _Avslutat_ visas i listan (deltagare med status _Ej start_ och _Anmäld_ visas inte).
+
+.Varvregisteringvy vid start
+image::reg1.png[]
+
+Beskrivning av knappar:
+
+- `+` -> Registrerar ett godkänt varv
+- `x` -> Registrerar ett icke godkänt varv
+- `-` -> Tar bort senast registrerade varv
+
+- `Avsluta` -> avslutar loppet för deltagare
+
+- `Aktivera` -> återaktiverar deltagare
+
+Värt att notera är att knappar kommer att vara aktiva eller inaktiva beroende på status. Till exempel så är varvsknapparna `+ x -` inaktiverade för löpare som inte är aktiva, för att undvika felstämpling.
+
+.Exempel "mitt i loppet", där deltagare 1 har avslutat
+image::reg2.png[]
+
+- Vid varvsmålgång registreras löpare enligt följande:
+. Ett godkänt varv registreras genom att klicka `+`
+. Ett icke godkänt varv registreras genom att klicka `x`. Detta resulterar också i att löpare erhåller status _Avslutat_
+
+- Löpare som efter godkänt varv anmäler att de inte längre tänker deltaga, registreras genom att klicka på `Avsluta`
+
+- Om felaktig varvsinformation registreras, klickas knappen `-` för att ta bort det senaste registrerade varvet. Därefter kan man återigen registrera genom `+` eller `x`.
+
+- Om en deltagare felaktigt registrerats för icke godkänt varv `x`, måste löparen återigen registeras som aktiv genom att klicka `Aktivera`. Då blir knappen `-` klickbar igen och det går att ta bort varvet och ersätta med ett godkänt (`+`).
+
+- Om deltagare felaktigt har registrerats som avslutad genom knappen `Avsluta`, kan löparen återaktiveras genom att klicka `Aktivera`.
+
+[TIP]
+====
+Om `Prioritera aktiva deltagare` väljs, sorteras listan först på aktiva deltagare, därefter i startnummerordning. Detta underlättar hantering framförallt i senare skede av loppet, då många löpare har avslutat sitt deltagande:
+
+image::reg3.png[]
+====
+
+=== Resultatvy (leaderboard)
+
+Resultatvyn http://<ip-adress>:8080/results listar aktuellt resultat vid en given tidpunkt, den uppdateras per automatik när applikationen får in ny data om löpare.
+
+Vyn lämpar sig väl för storbildsskärm på arena, eller kan användas mer småskaligt i sekreteriat.
+
+image::result1.png[]
+
+Endast deltagare med status _Aktiv_ eller _Avslutat_ visas i listan (deltagare med status _Ej start_ och _Anmäld_ visas inte).
+
+[TIP]
+====
+Det går att dölja image:menubutton.png[20,20] om så önskas genom att ange http://<ip-adress>:8080/results?hideMenu=true
+====
+Se även:
+
+- http://<ip-adress>:8080/results/women
+- http://<ip-adress>:8080/results/men
+- http://<ip-adress>:8080/results/teams
