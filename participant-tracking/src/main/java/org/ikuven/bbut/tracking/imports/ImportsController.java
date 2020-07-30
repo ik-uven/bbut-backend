@@ -50,18 +50,39 @@ public class ImportsController {
 
         if (multipartFiles.size() != 1) {
             String message = String.format("Number of uploaded parts should be 1, was %d.", multipartFiles.size());
-            ImportsResult importsResult = ImportsResult.createErrorResult(message);
-
-            log.error(importsResult.toString());
-
-            return ResponseEntity
-                    .status(HttpStatus.BAD_REQUEST)
-                    .body(resultAsJson(importsResult));
+            return createErrorResponse(message, HttpStatus.BAD_REQUEST);
         }
 
-        saveIncomingFile(multipartFiles.get(0));
+        final var file = multipartFiles.get(0);
 
-        InputStream uploadedInputStream = multipartFiles.get(0).getInputStream();
+        if (file.getOriginalFilename() != null && !file.getOriginalFilename().contains(".csv")) {
+            String message = "The import does only accept csv files";
+            return createErrorResponse(message, HttpStatus.BAD_REQUEST);
+        }
+
+        final var firstLine = new BufferedReader(new InputStreamReader(file.getInputStream(), StandardCharsets.UTF_8))
+                .lines()
+                .findFirst()
+                .orElseThrow();
+
+        log.warn(firstLine);
+
+        String headerString = "Förnamn;Efternamn;Klubb;Klass;Lagnamn;Födelsedatum";
+        if (firstLine == null || !firstLine.endsWith(headerString)) {
+            String message = String.format("The first line in file must be: %s", headerString);
+            return createErrorResponse(message, HttpStatus.BAD_REQUEST);
+        }
+
+        try {
+            participantService.removeAllParticipants();
+        } catch (IllegalArgumentException e) {
+            String message = "Cannot import due to active participants in system";
+            return createErrorResponse(message, HttpStatus.FORBIDDEN);
+        }
+
+        saveIncomingFile(file);
+
+        InputStream uploadedInputStream = file.getInputStream();
 
         List<Participant> registeredParticipants = new ArrayList<>();
         new BufferedReader(new InputStreamReader(uploadedInputStream, StandardCharsets.UTF_8))
@@ -80,6 +101,16 @@ public class ImportsController {
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(registeredParticipants);
+    }
+
+    private ResponseEntity<Object> createErrorResponse(String message, HttpStatus status) throws JsonProcessingException {
+        ImportsResult importsResult = ImportsResult.createErrorResult(message);
+
+        log.error(importsResult.toString());
+
+        return ResponseEntity
+                .status(status)
+                .body(resultAsJson(importsResult));
     }
 
     private void saveIncomingFile(MultipartFile file) throws IOException {

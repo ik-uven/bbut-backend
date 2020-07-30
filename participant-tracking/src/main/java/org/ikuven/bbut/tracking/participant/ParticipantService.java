@@ -1,6 +1,7 @@
 package org.ikuven.bbut.tracking.participant;
 
 import lombok.extern.slf4j.Slf4j;
+import org.ikuven.bbut.tracking.repository.DatabaseSequenceRepository;
 import org.ikuven.bbut.tracking.repository.ParticipantRepository;
 import org.ikuven.bbut.tracking.settings.BackendSettingsProperties;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,13 +22,16 @@ public class ParticipantService {
 
     private final ParticipantRepository repository;
 
+    private final DatabaseSequenceRepository sequenceRepository;
+
     private final BackendSettingsProperties backendSettingsProperties;
 
     private final ApplicationEventPublisher eventPublisher;
 
     @Autowired
-    public ParticipantService(ParticipantRepository repository, BackendSettingsProperties backendSettingsProperties, ApplicationEventPublisher eventPublisher) {
+    public ParticipantService(ParticipantRepository repository, DatabaseSequenceRepository sequenceRepository, BackendSettingsProperties backendSettingsProperties, ApplicationEventPublisher eventPublisher) {
         this.repository = repository;
+        this.sequenceRepository = sequenceRepository;
         this.backendSettingsProperties = backendSettingsProperties;
         this.eventPublisher = eventPublisher;
     }
@@ -181,5 +185,15 @@ public class ParticipantService {
         eventPublisher.publishEvent(of(ParticipantEvent.Type.CHANGED_LAP_STATE, savedParticipant, String.format("lapNumber: %d  lapState: %s", lapNumber, lapState)));
 
         return savedParticipant;
+    }
+
+    public void removeAllParticipants() {
+
+        if (getActivatedParticipants().size() > 0) {
+            throw new IllegalArgumentException("Will not remove all when there are participants in states ACTIVE or RESIGNED");
+        }
+
+        repository.deleteAll();
+        sequenceRepository.deleteAll();
     }
 }
