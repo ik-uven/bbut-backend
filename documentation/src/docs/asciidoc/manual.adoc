@@ -7,9 +7,11 @@ ifndef::imagesdir[:imagesdir: images]
 
 === Importera deltagare
 
-Deltagare kan importeras till applikationen genom att använda en semikolon-separerad csv-fil innehållandes uppgifter för en deltagare per rad.
+Deltagare kan importeras till applikationen genom att använda en csv-fil som innehåller uppgifter om tävlingens deltagare. Varje rad i filen representerar en deltagare.
 
-Första raden i filen är en rubrikrad som namnger fälten som en deltagarpost består av. Denna rad kommer att ignoreras vid importen, det är först rad 2 som behöver innehålla den första deltagaren.
+Första raden i filen är en rubrikrad som namnger fälten som en deltagarpost består av. Denna ska se ut enligt följande: `Förnamn;Efternamn;Klubb;Klass;Lagnamn;Födelsedatum`.
+
+Rubikraden kommer att ignoreras vid import, det är först rad 2 som behöver innehålla den första deltagarposten.
 
 .Exempel på csv-fil med 3 deltagare
 [source,csv]
@@ -23,21 +25,24 @@ Klara;Jönsson;Ultra High;Damer;Team Friskus;1970-05-21
 [TIP]
 Microsoft Excel eller motsvarande kalkylprogram kan spara sitt innehåll som csv-filer.
 
-Csv-fil laddas upp och importeras till applikationen genom att anrop ett REST-api. För närvarande görs detta enklast genom att använda `curl` från ett terminalfönster.
+Csv-fil importeras till applikationen via http://<ip-adress>:8080/import.
 
-.curl syntax för att göra en POST http request
-----
-curl -X POST -F file=@<filnamn>.csv  http://<ip-adress>:8080/api/participants/imports
-----
+[IMPORTANT]
+====
+Ett antal regler måste uppfyllas för att applikationen ska godkänna import.
 
-Ersätt `<filnamn>` med csv-filens namn samt `<ip-adress>` med ip-adress till den dator som kör applikationen.
+- Innehållet av fil som importeras ska vara semikolonseparerat och fil ska ha ändelsen `.csv`.
 
-.Exempel
-----
-curl -X POST -F file=@bbut-2020-registered-official.csv  http://192.168.1.156:8080/api/participants/imports
-----
+- Om applikationen redan innehåller deltagare från tidigare import, ersätts dessa om en ny import sker. Detta sker endast om samtliga deltagare har status _Anmäld_ (se <<status,beskrivning av status>>). Ett felmeddelande visas om import företas då det finns _Aktiva_ eller _Avslutade_ deltagare. Med andra ord ska det inte av misstag gå att importera över deltagare i pågående tävling.
 
-Importerade deltagare kan sedan administreras från webbläsare, se nästa kapitel.
+- Första raden måste bestå av:
++
+----
+Förnamn;Efternamn;Klubb;Klass;Lagnamn;Födelsedatum
+----
+====
+
+Importerade deltagare kan administreras från webbläsare, se nästa kapitel.
 
 === Administera deltagare
 
@@ -61,7 +66,7 @@ Knapparna under _Status_ används för att sätta deltagare i rätt status i sam
 
 Det finns fyra statuslägen som varje enskild deltagare kan vara i.
 
-
+[[status]]
 |===
 |Status |Beskrivning
 
