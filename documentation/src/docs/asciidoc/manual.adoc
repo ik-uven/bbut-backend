@@ -42,11 +42,9 @@ Förnamn;Efternamn;Klubb;Klass;Lagnamn;Födelsedatum
 ----
 ====
 
-Importerade deltagare kan administreras från webbläsare, se nästa kapitel.
-
 === Administera deltagare
 
-Det går att lägga till, ändra och ta bort deltagare från ett webbläsargränssnitt. Sökvägen är http://<ip-adress>/admin.
+Det går att lägga till, ändra och ta bort deltagare från ett webbläsargränssnitt. Sökvägen är http://<ip-adress>/admin (eller välj _Administration_ i menyn image:menubutton.png[20,20]).
 
 image::admin1.png[]
 
@@ -102,7 +100,7 @@ Det går att hoppa mellan olika status obehindrat _innan ett varv har registrera
 
 === Varvregistrering
 
-Registreringsvyn på http://<ip-adress>:8080/registrator används för registrera nya uppgifter om varv och status för deltagare. Den används av funktionärer i samband med varvmålgång, antingen genom att använda en dedikerad dator, eller genom att ladda in sidan i mobiltelefons webbläsare (kräver att mobiltelefon är uppkopplad till samma wifi-router som server).
+Registreringsvyn på http://<ip-adress>:8080/registrator (eller välj _Varvregistrering_ i menyn image:menubutton.png[20,20]) används för registrera nya uppgifter om varv och status för deltagare. Den används av funktionärer i samband med varvmålgång, antingen genom att använda en dedikerad dator, eller genom att ladda in sidan i mobiltelefons webbläsare (kräver att mobiltelefon är uppkopplad till samma wifi-router som server).
 
 Deltagare visas sorterade på startnummer. Endast deltagare med status _Aktiv_ eller _Avslutat_ visas i listan (deltagare med status _Ej start_ och _Anmäld_ visas inte).
 
@@ -145,7 +143,7 @@ image::reg3.png[450,450]
 
 === Resultatvy (leaderboard)
 
-Resultatvyn http://<ip-adress>:8080/results listar aktuellt resultat vid en given tidpunkt, den uppdateras per automatik när applikationen får in ny data om löpare.
+Resultatvyn http://<ip-adress>:8080/results (eller välj _Resultat_ i menyn image:menubutton.png[20,20]) listar aktuellt resultat vid en given tidpunkt, den uppdateras per automatik när applikationen får in ny data om löpare.
 
 Vyn lämpar sig väl för storbildsskärm på arena, eller kan användas mer småskaligt i sekreteriat.
 
@@ -162,3 +160,13 @@ Se även:
 - http://<ip-adress>:8080/results/women
 - http://<ip-adress>:8080/results/men
 - http://<ip-adress>:8080/results/teams
+
+== Meny
+
+Använd menyn för enklare navigering:
+
+- Klicka image:menubutton.png[20,20] för att expandera meny
+
+== Export av resultat
+
+Resultatlistan kan exporteras till excel genom http://<ip-adress>:8080/api/participants/download (eller välj _Exportera till Excel_ i menyn image:menubutton.png[20,20]).
