@@ -2,11 +2,17 @@ package org.ikuven.bbut.tracking.web;
 
 import org.ikuven.bbut.tracking.participant.*;
 import org.ikuven.bbut.tracking.settings.BackendSettingsProperties;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -16,10 +22,12 @@ public class ParticipantController {
 
     private final ParticipantService participantService;
     private final BackendSettingsProperties backendSettingsProperties;
+    private final ExcelService excelService;
 
-    public ParticipantController(ParticipantService participantService, BackendSettingsProperties backendSettingsProperties) {
+    public ParticipantController(ParticipantService participantService, BackendSettingsProperties backendSettingsProperties, ExcelService excelService) {
         this.participantService = participantService;
         this.backendSettingsProperties = backendSettingsProperties;
+        this.excelService = excelService;
     }
 
     @PostMapping(path = "/participants", consumes = MediaType.APPLICATION_JSON_VALUE)
@@ -101,6 +109,25 @@ public class ParticipantController {
         Participant participant = participantService.deleteLap(participantId, lapNumber);
 
         return ResponseEntity.ok(toDto(participant));
+    }
+
+    @GetMapping(value = "/participants/download")
+    public ResponseEntity<InputStreamResource> excelParticipants() throws IOException {
+        List<Participant> participants = participantService.getAllParticipants();
+        List<Team> teams = participantService.getAllTeams();
+
+        ByteArrayInputStream in = excelService.exportToExcel(participants, teams);
+
+        final var now = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss"));
+        String fileName = String.format("results-%s.xlsx", now);
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Content-Disposition", String.format("attachment; filename=%s", fileName));
+
+        return ResponseEntity
+                .ok()
+                .headers(headers)
+                .body(new InputStreamResource(in));
     }
 
     private ParticipantDto toDto(Participant participant) {

@@ -77,6 +77,17 @@ public class Participant {
         return lastLap != null ? lastLap.getState() : LapState.NONE;
     }
 
+    public int getLastSuccessfulLapNumber() {
+        int lapNumber = 0;
+
+        Lap lastLap = getLastLap();
+        if (lastLap != null) {
+            lapNumber = lastLap.getState().equals(LapState.COMPLETED)  ? lastLap.getNumber() : lastLap.getNumber() - 1;
+        }
+
+        return lapNumber;
+    }
+
     private int nextLapNumber() {
         return laps.size() + 1;
     }

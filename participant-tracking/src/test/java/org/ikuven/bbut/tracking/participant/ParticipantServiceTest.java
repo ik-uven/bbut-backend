@@ -227,5 +227,5 @@ class ParticipantServiceTest {
         return IntStream.range(0, lapStates.length)
                 .mapToObj(i -> Lap.of(i + 1, i + 1 == 1 ? FINISH_TIME : FINISH_TIME.plusHours(1), lapStates[i]))
                 .collect(Collectors.toList());
-    }
+    }*/
 }
