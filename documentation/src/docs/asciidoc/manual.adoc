@@ -71,7 +71,7 @@ Det finns fyra statuslägen som varje enskild deltagare kan vara i.
 |Anmäld (REGISTERED)
 |Deltagare är anmäld. Denna status fås per automatik när deltagare importeras eller skapas.
 
-|Ej start (NO_SHOW)
+|Avhoppad (NO_SHOW)
 |Deltagare kom ej till start.
 
 |Aktiv (ACTIVE)
@@ -85,11 +85,11 @@ Statusknapparna på http://<ip-adress>/admin används för att sätta deltagare 
 
 Typisk tågordning:
 
-. Innan start anmäler sig deltagare vid sekreteriat för att hämta ut nummerlapp. I samband med detta ska deltagaren sättas i status _Aktiv_ genom att trycka `Aktivera`.
+. Innan start anmäler sig deltagare vid sekreteriat för att hämta ut nummerlapp. I samband med detta ska deltagaren sättas i status _Aktiv_ genom att trycka `Aktiv`.
 
-. Eventuella deltagare som inte har infunnit sig vid start anges som ej startande genom att trycka `Ej start`.
+. Eventuella deltagare som inte har infunnit sig vid start anges som ej startande genom att trycka `Avhoppad`.
 
-. Om deltagare under loppet anmäler att de vill avsluta, ska detta registreras genom att trycka `Avsluta`
+. Om deltagare under loppet anmäler att de vill avsluta, ska detta registreras genom att trycka `Avslutad`
 
 .Statusknappar
 image::statusbuttons.png[]
@@ -102,7 +102,7 @@ Det går att hoppa mellan olika status obehindrat _innan ett varv har registrera
 
 Registreringsvyn på http://<ip-adress>:8080/registrator (eller välj _Varvregistrering_ i menyn image:menubutton.png[20,20]) används för registrera nya uppgifter om varv och status för deltagare. Den används av funktionärer i samband med varvmålgång, antingen genom att använda en dedikerad dator, eller genom att ladda in sidan i mobiltelefons webbläsare (kräver att mobiltelefon är uppkopplad till samma wifi-router som server).
 
-Deltagare visas sorterade på startnummer. Endast deltagare med status _Aktiv_ eller _Avslutat_ visas i listan (deltagare med status _Ej start_ och _Anmäld_ visas inte).
+Deltagare visas sorterade på startnummer. Endast deltagare med status _Aktiv_ eller _Avslutad_ visas i listan (deltagare med status _Avhoppad_ och _Anmäld_ visas inte).
 
 .Varvregisteringvy vid start
 image::reg1.png[450,450]
@@ -113,9 +113,9 @@ Beskrivning av knappar:
 - `x` -> Registrerar ett icke godkänt varv
 - `-` -> Tar bort senast registrerade varv
 
-- `Avsluta` -> avslutar loppet för deltagare
+- `Avslutad` -> avslutar loppet för deltagare
 
-- `Aktivera` -> återaktiverar deltagare
+- `Aktiv` -> återaktiverar deltagare
 
 Värt att notera är att knappar kommer att vara aktiva eller inaktiva beroende på status. Till exempel så är varvsknapparna `+ x -` inaktiverade för löpare som inte är aktiva, för att undvika felstämpling.
 
@@ -124,15 +124,15 @@ image::reg2.png[450,450]
 
 - Vid varvsmålgång registreras löpare enligt följande:
 . Ett godkänt varv registreras genom att klicka `+`
-. Ett icke godkänt varv registreras genom att klicka `x`. Detta resulterar också i att löpare erhåller status _Avslutat_
+. Ett icke godkänt varv registreras genom att klicka `x`. Detta resulterar också i att löpare erhåller status _Avslutad_
 
-- Löpare som efter godkänt varv anmäler att de inte längre tänker deltaga, registreras genom att klicka på `Avsluta`
+- Löpare som efter godkänt varv anmäler att de inte längre tänker deltaga, registreras genom att klicka på `Avslutad`
 
 - Om felaktig varvsinformation registreras, klickas knappen `-` för att ta bort det senaste registrerade varvet. Därefter kan man återigen registrera genom `+` eller `x`.
 
-- Om en deltagare felaktigt registrerats för icke godkänt varv `x`, måste löparen återigen registeras som aktiv genom att klicka `Aktivera`. Då blir knappen `-` klickbar igen och det går att ta bort varvet och ersätta med ett godkänt (`+`).
+- Om en deltagare felaktigt registrerats för icke godkänt varv `x`, måste löparen återigen registeras som aktiv genom att klicka `Aktiv`. Då blir knappen `-` klickbar igen och det går att ta bort varvet och ersätta med ett godkänt (`+`).
 
-- Om deltagare felaktigt har registrerats som avslutad genom knappen `Avsluta`, kan löparen återaktiveras genom att klicka `Aktivera`.
+- Om deltagare felaktigt har registrerats som avslutad genom knappen `Avslutad`, kan löparen återaktiveras genom att klicka `Aktiv`.
 
 [TIP]
 ====
@@ -149,7 +149,7 @@ Vyn lämpar sig väl för storbildsskärm på arena, eller kan användas mer sm�
 
 image::result1.png[]
 
-Endast deltagare med status _Anmäld_, _Aktiv_ eller _Avslutat_ visas i listan (deltagare med status _Ej start_ visas inte).
+Endast deltagare med status _Anmäld_, _Aktiv_ eller _Avslutad_ visas i listan (deltagare med status _Avhoppad_ visas inte).
 
 [TIP]
 ====
