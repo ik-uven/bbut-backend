@@ -25,7 +25,7 @@ Klara;Jönsson;Ultra High;Damer;Team Friskus;1970-05-21
 [TIP]
 Microsoft Excel eller motsvarande kalkylprogram kan spara sitt innehåll som csv-filer.
 
-Csv-fil importeras till applikationen via http://<ip-adress>:8080/import.
+Csv-fil importeras till applikationen via http://<ip-adress>/import.
 
 [IMPORTANT]
 ====
@@ -71,7 +71,7 @@ Det finns fyra statuslägen som varje enskild deltagare kan vara i.
 |Anmäld (REGISTERED)
 |Deltagare är anmäld. Denna status fås per automatik när deltagare importeras eller skapas.
 
-|Avhoppad (NO_SHOW)
+|Frånvarande (NO_SHOW)
 |Deltagare kom ej till start.
 
 |Aktiv (ACTIVE)
@@ -87,7 +87,7 @@ Typisk tågordning:
 
 . Innan start anmäler sig deltagare vid sekreteriat för att hämta ut nummerlapp. I samband med detta ska deltagaren sättas i status _Aktiv_ genom att trycka `Aktiv`.
 
-. Eventuella deltagare som inte har infunnit sig vid start anges som ej startande genom att trycka `Avhoppad`.
+. Eventuella deltagare som inte har infunnit sig vid start anges som ej startande genom att trycka `Frånvarande`.
 
 . Om deltagare under loppet anmäler att de vill avsluta, ska detta registreras genom att trycka `Avslutad`
 
@@ -100,9 +100,9 @@ Det går att hoppa mellan olika status obehindrat _innan ett varv har registrera
 
 === Varvregistrering
 
-Registreringsvyn på http://<ip-adress>:8080/registrator (eller välj _Varvregistrering_ i menyn image:menubutton.png[20,20]) används för registrera nya uppgifter om varv och status för deltagare. Den används av funktionärer i samband med varvmålgång, antingen genom att använda en dedikerad dator, eller genom att ladda in sidan i mobiltelefons webbläsare (kräver att mobiltelefon är uppkopplad till samma wifi-router som server).
+Registreringsvyn på http://<ip-adress>/registrator (eller välj _Varvregistrering_ i menyn image:menubutton.png[20,20]) används för registrera nya uppgifter om varv och status för deltagare. Den används av funktionärer i samband med varvmålgång, antingen genom att använda en dedikerad dator, eller genom att ladda in sidan i mobiltelefons webbläsare (kräver att mobiltelefon är uppkopplad till samma wifi-router som server).
 
-Deltagare visas sorterade på startnummer. Endast deltagare med status _Aktiv_ eller _Avslutad_ visas i listan (deltagare med status _Avhoppad_ och _Anmäld_ visas inte).
+Deltagare visas sorterade på startnummer. Endast deltagare med status _Aktiv_ eller _Avslutad_ visas i listan (deltagare med status _Frånvarande_ och _Anmäld_ visas inte).
 
 .Varvregisteringvy vid start
 image::reg1.png[450,450]
@@ -143,23 +143,23 @@ image::reg3.png[450,450]
 
 === Resultatvy (leaderboard)
 
-Resultatvyn http://<ip-adress>:8080/results (eller välj _Resultat_ i menyn image:menubutton.png[20,20]) listar aktuellt resultat vid en given tidpunkt, den uppdateras per automatik när applikationen får in ny data om löpare.
+Resultatvyn http://<ip-adress>/results (eller välj _Resultat_ i menyn image:menubutton.png[20,20]) listar aktuellt resultat vid en given tidpunkt, den uppdateras per automatik när applikationen får in ny data om löpare.
 
 Vyn lämpar sig väl för storbildsskärm på arena, eller kan användas mer småskaligt i sekreteriat.
 
 image::result1.png[]
 
-Endast deltagare med status _Anmäld_, _Aktiv_ eller _Avslutad_ visas i listan (deltagare med status _Avhoppad_ visas inte).
+Endast deltagare med status _Anmäld_, _Aktiv_ eller _Avslutad_ visas i listan (deltagare med status _Frånvarande_ visas inte).
 
 [TIP]
 ====
-Det går att dölja image:menubutton.png[20,20] om så önskas genom att ange http://<ip-adress>:8080/results?hideMenu=true
+Det går att dölja image:menubutton.png[20,20] om så önskas genom att ange http://<ip-adress>/results?hideMenu=true
 ====
 Se även:
 
-- http://<ip-adress>:8080/results/women
-- http://<ip-adress>:8080/results/men
-- http://<ip-adress>:8080/results/teams
+- http://<ip-adress>/results/women
+- http://<ip-adress>/results/men
+- http://<ip-adress>/results/teams
 
 == Meny
 
@@ -169,4 +169,4 @@ Använd menyn för enklare navigering:
 
 == Export av resultat
 
-Resultatlistan kan exporteras till excel genom http://<ip-adress>:8080/api/participants/download (eller välj _Exportera till Excel_ i menyn image:menubutton.png[20,20]).
+Resultatlistan kan exporteras till excel genom http://<ip-adress>/api/participants/download (eller välj _Exportera till Excel_ i menyn image:menubutton.png[20,20]).
