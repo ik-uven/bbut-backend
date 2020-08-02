@@ -127,6 +127,7 @@ public class ParticipantController {
         return ResponseEntity
                 .ok()
                 .headers(headers)
+                .contentType(MediaType.parseMediaType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"))
                 .body(new InputStreamResource(in));
     }
 
