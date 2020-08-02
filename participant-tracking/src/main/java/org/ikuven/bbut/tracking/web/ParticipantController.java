@@ -116,10 +116,10 @@ public class ParticipantController {
         List<Participant> participants = participantService.getAllParticipants();
         List<Team> teams = participantService.getAllTeams();
 
-        ByteArrayInputStream in = excelService.exportToExcel(participants, teams);
+        ByteArrayInputStream excel = excelService.exportToExcel(participants, teams);
 
         final var now = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss"));
-        String fileName = String.format("results-%s.xlsx", now);
+        String fileName = String.format("bbut-results-%s.xlsx", now);
 
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-Disposition", String.format("attachment; filename=%s", fileName));
@@ -128,7 +128,7 @@ public class ParticipantController {
                 .ok()
                 .headers(headers)
                 .contentType(MediaType.parseMediaType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"))
-                .body(new InputStreamResource(in));
+                .body(new InputStreamResource(excel));
     }
 
     private ParticipantDto toDto(Participant participant) {
