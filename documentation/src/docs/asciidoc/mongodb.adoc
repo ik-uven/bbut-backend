@@ -3,8 +3,6 @@
 Installing Mongo DB::
 
 Mac: https://docs.mongodb.com/manual/tutorial/install-mongodb-on-os-x/
-+
-Docker: https://hub.docker.com/r/andresvidal/rpi3-mongodb3
 
 Mongo DB connect on server::
 
@@ -62,5 +60,7 @@ Restore backup::
 mongorestore -d prod -u backup_user -p bbutinbunketorp /tmp/mbackup/prod
 ----
 
-Docker image::
-https://hub.docker.com/r/andresvidal/rpi3-mongodb3
+Example of copying from pi::
+----
+scp -r ubuntu@192.168.1.156:bbut/db/usb-drive/bbut-db-backup/08_03_10_12/prod .
+----

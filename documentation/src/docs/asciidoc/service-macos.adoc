@@ -1,0 +1,62 @@
+= Notes
+
+.Editing the service
+----
+sudo vi /Library/LaunchDaemons/org.bbut.result.tracking.plist
+----
+
+.file content
+[source,xml]
+----
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN"
+    "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>Label</key>
+    <string>org.bbut.result.tracking</string>
+    <key>ServiceDescription</key>
+    <string>BBUT Result tracking application</string>
+    <key>ProgramArguments</key>
+    <array>
+        <string>/opt/bbut/result-tracking.sh</string>
+    </array>
+    <key>RunAtLoad</key>
+    <false/>
+    <key>StandardErrorPath</key>
+    <string>/tmp/bbut/service.stderr</string>
+    <key>WorkingDirectory</key>
+    <string>/tmp/bbut/</string>
+</dict>
+</plist>
+----
+
+.Editing the sh file that starts the application
+----
+sudo vi /opt/bbut/result-tracking.sh
+----
+
+.file content
+----
+#!/bin/bash
+java -jar /opt/bbut/participant-tracking-0.0.1-SNAPSHOT.jar --server.port=8085
+----
+
+.loading the service
+----
+sudo launchctl load /Library/LaunchDaemons/org.bbut.result.tracking.plist
+----
+
+.Starting
+----
+sudo launchctl start org.bbut.result.tracking
+
+# Started service workingdir: /tmp/bbut
+----
+
+.List service
+----
+sudo launchctl list | grep result
+
+# Also see /tmp/bbut/service.stderr for error logging
+----
