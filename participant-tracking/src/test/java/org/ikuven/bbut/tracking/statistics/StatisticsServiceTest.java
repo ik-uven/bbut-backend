@@ -122,7 +122,7 @@ class StatisticsServiceTest {
         Participant participant5 = createParticipant();
         participant5.setBirthDate(LocalDate.of(1989, 1, 1));
 
-        when(participantService.getActivatedParticipants()).thenReturn(List.of(participant1, participant2, participant3, participant4, participant5));
+        when(participantService.getAllParticipants()).thenReturn(List.of(participant1, participant2, participant3, participant4, participant5));
         when(statisticsService.now()).thenReturn(LocalDate.of(2020, 1, 1));
 
         Map<String, Long> ageDemographics = statisticsService.getAgeDemographics();
@@ -136,6 +136,6 @@ class StatisticsServiceTest {
     }
 
     private Participant createParticipant() {
-        return Participant.of(2L, "Andie", "Longrunner", "IK Uven", null, ParticipantClass.WOMEN, null, ParticipantState.ACTIVE);
+        return Participant.of(2L, 2, "Andie", "Longrunner", "IK Uven", null, ParticipantClass.WOMEN, null, ParticipantState.ACTIVE);
     }
 }

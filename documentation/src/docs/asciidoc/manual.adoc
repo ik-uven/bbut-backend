@@ -9,17 +9,17 @@ ifndef::imagesdir[:imagesdir: images]
 
 Deltagare kan importeras till applikationen genom att använda en csv-fil som innehåller uppgifter om tävlingens deltagare. Varje rad i filen representerar en deltagare.
 
-Första raden i filen är en rubrikrad som namnger fälten som en deltagarpost består av. Denna ska se ut enligt följande: `Förnamn;Efternamn;Klubb;Klass;Lagnamn;Födelsedatum`.
+Första raden i filen är en rubrikrad som namnger fälten som en deltagarpost består av. Denna ska se ut enligt följande: `Startnummer;Förnamn;Efternamn;Klubb;Klass;Lagnamn;Födelsedatum`.
 
 Rubikraden kommer att ignoreras vid import, det är först rad 2 som behöver innehålla den första deltagarposten.
 
 .Exempel på csv-fil med 3 deltagare
 [source,csv]
 ----
-Förnamn;Efternamn;Klubb;Klass;Lagnamn;Födelsedatum
-Pelle;Svensson;Göta Källare;Herrar;;1973-06-19
-Johan;Andersson;;Herrar;;1989-12-09
-Klara;Jönsson;Ultra High;Damer;Team Friskus;1970-05-21
+Startnummer;Förnamn;Efternamn;Klubb;Klass;Lagnamn;Födelsedatum
+1;Pelle;Svensson;Göta Källare;Herrar;;1973-06-19
+2;Johan;Andersson;;Herrar;;1989-12-09
+3;Klara;Jönsson;Ultra High;Damer;Team Friskus;1970-05-21
 ----
 
 [TIP]
@@ -38,7 +38,7 @@ Ett antal regler måste uppfyllas för att applikationen ska godkänna import.
 - Första raden måste bestå av:
 +
 ----
-Förnamn;Efternamn;Klubb;Klass;Lagnamn;Födelsedatum
+Startnummer;Förnamn;Efternamn;Klubb;Klass;Lagnamn;Födelsedatum
 ----
 ====
 

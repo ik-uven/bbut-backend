@@ -13,6 +13,7 @@ import java.util.List;
 public class ParticipantDto {
 
     long id;
+    long startNumber;
     String firstName;
     String lastName;
     String club;

@@ -10,7 +10,7 @@ import java.util.stream.Collectors;
 @Data
 public class LapTimeStatisticsDto {
 
-    private long participantId;
+    private long startNumber;
     private String firstName;
     private String lastName;
     private String club;
@@ -18,8 +18,8 @@ public class LapTimeStatisticsDto {
     private List<LapDurationDto> lapDurations;
     private int averageLapInMinutes;
 
-    private LapTimeStatisticsDto(long participantId, String firstName, String lastName, String club, String team, List<LapDuration> lapDurations, int averageLapInMinutes) {
-        this.participantId = participantId;
+    private LapTimeStatisticsDto(long startNumber, String firstName, String lastName, String club, String team, List<LapDuration> lapDurations, int averageLapInMinutes) {
+        this.startNumber = startNumber;
         this.firstName = firstName;
         this.lastName = lastName;
         this.club = club;
@@ -30,7 +30,7 @@ public class LapTimeStatisticsDto {
 
     public static LapTimeStatisticsDto of(LapTimeStatistics lapTimeStatistics) {
         return new LapTimeStatisticsDto(
-                lapTimeStatistics.getParticipant().getId(),
+                lapTimeStatistics.getParticipant().getStartNumber(),
                 lapTimeStatistics.getParticipant().getFirstName(),
                 lapTimeStatistics.getParticipant().getLastName(),
                 lapTimeStatistics.getParticipant().getClub(),

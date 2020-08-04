@@ -35,7 +35,7 @@ public class ParticipantController {
 
         ParticipantClass participantClass = ParticipantClass.valueOf(participantInput.getGender());
 
-        Participant participant = participantService.registerParticipant(participantInput.getFirstName(), participantInput.getLastName(), participantInput.getClub(), participantInput.getTeam(), participantClass, participantInput.getBirthDate());
+        Participant participant = participantService.registerParticipant(Long.parseLong(participantInput.getStartNumber()), participantInput.getFirstName(), participantInput.getLastName(), participantInput.getClub(), participantInput.getTeam(), participantClass, participantInput.getBirthDate());
 
         return ResponseEntity
                 .status(HttpStatus.CREATED)
@@ -132,7 +132,7 @@ public class ParticipantController {
     }
 
     private ParticipantDto toDto(Participant participant) {
-        return ParticipantDto.of(participant.getId(), participant.getFirstName(), participant.getLastName(), participant.getClub(), participant.getTeam(), participant.getParticipantClass(), participant.getParticipantState(), participant.getLaps());
+        return ParticipantDto.of(participant.getId(), participant.getStartNumber(), participant.getFirstName(), participant.getLastName(), participant.getClub(), participant.getTeam(), participant.getParticipantClass(), participant.getParticipantState(), participant.getLaps());
     }
 
     private TeamDto toTeamDto(Team team) {

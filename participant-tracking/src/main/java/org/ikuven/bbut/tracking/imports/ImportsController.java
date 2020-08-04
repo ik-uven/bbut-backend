@@ -127,14 +127,15 @@ public class ImportsController {
 
     private Participant prepareParticipant(String line) {
         String[] candidate = line.split(";");
-        String firstName = capitalizeFirst(candidate[0]);
-        String lastName = capitalizeFirst(candidate[1]);
-        String club = capitalizeFirst(candidate[2]);
-        ParticipantClass participantClass = toParticipantClass(candidate[3]);
-        String team = capitalizeFirst(candidate[4]);
-        LocalDate birthDate = toBirthDate(candidate[5]);
+        long startNumber = Long.parseLong(candidate[0]);
+        String firstName = capitalizeFirst(candidate[1]);
+        String lastName = capitalizeFirst(candidate[2]);
+        String club = capitalizeFirst(candidate[3]);
+        ParticipantClass participantClass = toParticipantClass(candidate[4]);
+        String team = capitalizeFirst(candidate[5]);
+        LocalDate birthDate = toBirthDate(candidate[6]);
 
-        return Participant.of(0L, firstName, lastName, club, team, participantClass, birthDate, ParticipantState.REGISTERED);
+        return Participant.of(0L, startNumber, firstName, lastName, club, team, participantClass, birthDate, ParticipantState.REGISTERED);
     }
 
     private ParticipantClass toParticipantClass(String string) {

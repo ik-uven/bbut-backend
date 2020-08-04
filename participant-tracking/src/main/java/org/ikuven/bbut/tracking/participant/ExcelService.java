@@ -128,7 +128,7 @@ public class ExcelService {
         for (Participant participant : participants) {
             Row row = sheet.createRow(rownum);
             Cell cell = row.createCell(0);
-            cell.setCellValue(participant.getId());
+            cell.setCellValue(participant.getStartNumber());
             cell.setCellStyle(style);
 
             cell = row.createCell(1);
@@ -264,7 +264,7 @@ public class ExcelService {
             cell.setCellStyle(style);
 
             cell = row.createCell(1);
-            cell.setCellValue(participant.getId());
+            cell.setCellValue(participant.getStartNumber());
             cell.setCellStyle(style);
 
             cell = row.createCell(2);

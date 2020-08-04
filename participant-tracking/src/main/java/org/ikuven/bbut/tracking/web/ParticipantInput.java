@@ -7,6 +7,7 @@ import java.time.LocalDate;
 @Data
 public class ParticipantInput {
 
+    private String startNumber;
     private String firstName;
     private String lastName;
     private String club;

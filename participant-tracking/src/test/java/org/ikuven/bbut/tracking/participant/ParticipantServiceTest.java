@@ -53,7 +53,7 @@ class ParticipantServiceTest {
     }
 
     private Participant createParticipant(long id, ParticipantState state) {
-        return Participant.of(id, null, null, null, null, null, null, state);
+        return Participant.of(id, id, null, null, null, null, null, null, state);
     }
 
     /*    @Test

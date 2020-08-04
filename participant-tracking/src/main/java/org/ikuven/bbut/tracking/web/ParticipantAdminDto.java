@@ -10,6 +10,7 @@ import org.ikuven.bbut.tracking.participant.ParticipantState;
 public class ParticipantAdminDto {
 
     private long id;
+    private long startNumber;
     private String firstName;
     private String lastName;
     private String club;

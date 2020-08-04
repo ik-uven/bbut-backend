@@ -71,10 +71,10 @@ public class AdminController {
             throw new IllegalArgumentException("participant input must not be empty");
         }
 
-        return Participant.of(input.getId(), input.getFirstName(), input.getLastName(), input.getClub(), input.getTeam(), input.getParticipantClass(), null, null);
+        return Participant.of(input.getId(), input.getStartNumber(), input.getFirstName(), input.getLastName(), input.getClub(), input.getTeam(), input.getParticipantClass(), null, null);
     }
 
     private ParticipantDto toDto(Participant participant) {
-        return ParticipantDto.of(participant.getId(), participant.getFirstName(), participant.getLastName(), participant.getClub(), participant.getTeam(), participant.getParticipantClass(), participant.getParticipantState(), participant.getLaps());
+        return ParticipantDto.of(participant.getId(), participant.getStartNumber(), participant.getFirstName(), participant.getLastName(), participant.getClub(), participant.getTeam(), participant.getParticipantClass(), participant.getParticipantState(), participant.getLaps());
     }
 }

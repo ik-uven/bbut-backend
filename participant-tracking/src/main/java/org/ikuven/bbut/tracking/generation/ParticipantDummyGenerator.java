@@ -94,7 +94,7 @@ public class ParticipantDummyGenerator {
                 participantClass = ParticipantClass.MEN;
             }
 
-            participantService.registerParticipant(newGivenNames, newsSurname, club, team, participantClass, LocalDate.of(1974,1,1));
+            participantService.registerParticipant(i, newGivenNames, newsSurname, club, team, participantClass, LocalDate.of(1974,1,1));
         }
 
         LOGGER.info("Generated {} demo participants", amountToGenerate);

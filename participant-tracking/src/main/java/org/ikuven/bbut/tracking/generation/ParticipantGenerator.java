@@ -17,11 +17,11 @@ public class ParticipantGenerator {
         this.participantService = participantService;
     }
 
-    public void generate(String firstName, String lastName, String club, String gender, LocalDate birthDate) {
-        generate(firstName, lastName, club, null, gender, birthDate);
+    public void generate(long startNumber, String firstName, String lastName, String club, String gender, LocalDate birthDate) {
+        generate(startNumber, firstName, lastName, club, null, gender, birthDate);
     }
 
-    public void generate(String firstName, String lastName, String club, String team, String gender, LocalDate birthDate) {
-        this.participantService.registerParticipant(firstName, lastName, club, team, ParticipantClass.valueOf(gender), birthDate);
+    public void generate(long startNumber, String firstName, String lastName, String club, String team, String gender, LocalDate birthDate) {
+        this.participantService.registerParticipant(startNumber, firstName, lastName, club, team, ParticipantClass.valueOf(gender), birthDate);
     }
 }

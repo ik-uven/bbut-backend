@@ -21,6 +21,7 @@ public class Participant {
 
     @Id
     private long id;
+    private long startNumber;
     private String firstName;
     private String lastName;
     private String club;
@@ -30,16 +31,17 @@ public class Participant {
     private ParticipantState participantState;
     private List<Lap> laps = new ArrayList<>();
 
-    public static Participant of(long id, String firstName, String lastName, String club, String team, ParticipantClass participantClass, LocalDate birthDate, ParticipantState participantState) {
-        return new Participant(id, firstName, lastName, club, team, participantClass, birthDate, participantState);
+    public static Participant of(long id, long startNumber, String firstName, String lastName, String club, String team, ParticipantClass participantClass, LocalDate birthDate, ParticipantState participantState) {
+        return new Participant(id, startNumber, firstName, lastName, club, team, participantClass, birthDate, participantState);
     }
 
-    public static Participant of(long id, String firstName, String lastName, String club, String team, ParticipantClass participantClass, LocalDate birthDate, ParticipantState participantState, List<Lap> laps) {
-        return new Participant(id, firstName, lastName, club, team, participantClass, birthDate, participantState, laps);
+    public static Participant of(long id, long startNumber, String firstName, String lastName, String club, String team, ParticipantClass participantClass, LocalDate birthDate, ParticipantState participantState, List<Lap> laps) {
+        return new Participant(id, startNumber, firstName, lastName, club, team, participantClass, birthDate, participantState, laps);
     }
 
-    private Participant(long id, String firstName, String lastName, String club, String team, ParticipantClass participantClass, LocalDate birthDate, ParticipantState participantState) {
+    private Participant(long id, long startNumber, String firstName, String lastName, String club, String team, ParticipantClass participantClass, LocalDate birthDate, ParticipantState participantState) {
         this.id = id;
+        this.startNumber = startNumber;
         this.firstName = firstName;
         this.lastName = lastName;
         this.club = club;
@@ -49,8 +51,8 @@ public class Participant {
         this.participantState = participantState;
     }
 
-    private Participant(long id, String firstName, String lastName, String club, String team, ParticipantClass participantClass, LocalDate birthDate, ParticipantState participantState, List<Lap> laps) {
-        this(id, firstName, lastName, club, team, participantClass, birthDate, participantState);
+    private Participant(long id, long startNumber, String firstName, String lastName, String club, String team, ParticipantClass participantClass, LocalDate birthDate, ParticipantState participantState, List<Lap> laps) {
+        this(id, startNumber, firstName, lastName, club, team, participantClass, birthDate, participantState);
         this.laps = laps;
     }
 

@@ -36,6 +36,7 @@ public class ParticipantAdminService {
     public Participant updateParticipant(Participant participantToUpdate) {
         Participant participant = participantService.getParticipant(participantToUpdate.getId());
 
+        participant.setStartNumber(participantToUpdate.getStartNumber());
         participant.setFirstName(participantToUpdate.getFirstName());
         participant.setLastName(participantToUpdate.getLastName());
         participant.setClub(participantToUpdate.getClub());

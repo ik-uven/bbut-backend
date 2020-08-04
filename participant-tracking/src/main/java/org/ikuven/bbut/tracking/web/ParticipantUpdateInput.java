@@ -7,6 +7,7 @@ import org.ikuven.bbut.tracking.participant.ParticipantClass;
 public class ParticipantUpdateInput {
 
     private Long id;
+    private Long startNumber;
     private String firstName;
     private String lastName;
     private String club;
