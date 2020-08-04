@@ -18,6 +18,7 @@ logging:
   level:
     org.ikuven.bbut.tracking: INFO
     org.springframework.web: INFO
+    reactor.netty.http.client: WARN
 
 ui-settings:
   result-view:
@@ -55,3 +56,4 @@ logging:
   level:
     org.ikuven.bbut.tracking: DEBUG
     org.springframework.web: DEBUG
+    reactor.netty.http.client: DEBUG
