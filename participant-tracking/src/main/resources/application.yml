@@ -9,6 +9,9 @@ spring:
 #      username: admin
 #      password: bbutinbunketorp
 
+server:
+  port: 8080
+
 logging:
   file:
     name: /tmp/logs/participant-tracker.log
