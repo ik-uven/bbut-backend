@@ -1,7 +1,7 @@
 :toc: left
 ifndef::imagesdir[:imagesdir: images]
 
-= Användarmanual
+= Användarmanual tävlingssystem
 
 == Innan tävlingsdagen
 
