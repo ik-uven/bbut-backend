@@ -45,6 +45,10 @@ spring:
 spring:
   profiles: demo
 
+logging:
+  file:
+    name: /tmp/logs/demo-participant-tracker.log
+
 demo:
  participants-to-generate: 0
 
