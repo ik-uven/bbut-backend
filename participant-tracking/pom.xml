@@ -5,14 +5,14 @@
     <parent>
         <groupId>org.ikuven.bbut</groupId>
         <artifactId>bbut-backend</artifactId>
-        <version>1.0.0</version>
+        <version>1.0.1-SNAPSHOT</version>
     </parent>
     <artifactId>participant-tracking</artifactId>
     <description>Participant tracking for BBUT</description>
 
     <properties>
         <java.version>11</java.version>
-        <bbut-ui.version>1.0-SNAPSHOT</bbut-ui.version>
+        <bbut-ui.version>1.0.1-SNAPSHOT</bbut-ui.version>
     </properties>
 
     <dependencies>
