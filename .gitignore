@@ -31,3 +31,5 @@ build/
 .vscode/
 
 target/
+pom.xml.versionsBackup
+*.log

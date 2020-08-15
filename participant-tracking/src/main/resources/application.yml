@@ -50,7 +50,7 @@ logging:
     name: /tmp/logs/demo-participant-tracker.log
 
 demo:
- participants-to-generate: 0
+ participants-to-generate: 42
 
 ---
 spring:

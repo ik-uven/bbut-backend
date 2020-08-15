@@ -3,14 +3,11 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.2.5.RELEASE</version>
-        <relativePath/>
+        <groupId>org.ikuven.bbut</groupId>
+        <artifactId>bbut-backend</artifactId>
+        <version>0.0.1-SNAPSHOT</version>
     </parent>
-    <groupId>org.ikuven.bbut</groupId>
     <artifactId>participant-tracking</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
     <description>Participant tracking for BBUT</description>
 
     <properties>
@@ -19,6 +16,10 @@
     </properties>
 
     <dependencies>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter</artifactId>
+        </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-actuator</artifactId>
@@ -57,11 +58,11 @@
             <version>4.1.2</version>
         </dependency>
 
-            <dependency>
-                <groupId>com.github.kenglxn.qrgen</groupId>
-                <artifactId>javase</artifactId>
-                <version>2.6.0</version>
-            </dependency>
+        <dependency>
+            <groupId>com.github.kenglxn.qrgen</groupId>
+            <artifactId>javase</artifactId>
+            <version>2.6.0</version>
+        </dependency>
 
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -130,7 +131,8 @@
                             <outputDirectory>${project.build.directory}/classes/static</outputDirectory>
                             <resources>
                                 <resource>
-                                    <directory>${project.build.directory}/unpacked/bbut-ui-${bbut-ui.version}/build</directory>
+                                    <directory>${project.build.directory}/unpacked/bbut-ui-${bbut-ui.version}/build
+                                    </directory>
                                     <includes>
                                         <include>*/**</include>
                                     </includes>
