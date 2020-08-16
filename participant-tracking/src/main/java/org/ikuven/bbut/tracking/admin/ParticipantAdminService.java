@@ -30,7 +30,7 @@ public class ParticipantAdminService {
     }
 
     public List<Participant> getAllParticipants() {
-        return repository.findAll(Sort.by(Sort.Direction.ASC, "id"));
+        return repository.findAll(Sort.by(Sort.Direction.ASC, "startNumber"));
     }
 
     public Participant updateParticipant(Participant participantToUpdate) {
